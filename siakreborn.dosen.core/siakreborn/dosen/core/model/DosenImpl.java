@@ -14,33 +14,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="dosen_impl")
-@Table(name="dosen_impl")
+@Entity(name = "dosen_impl")
+@Table(name = "dosen_impl")
 public class DosenImpl extends DosenComponent {
 
-	public DosenImpl(UUID id, String nama, String nip, String email) {
-		this.id = id;
-		this.nama = nama;
-		this.nip = nip;
-		this.email = email;
-	}
+  public DosenImpl(String nama, String nip, String email) {
+    this.id = UUID.randomUUID();
+    this.nama = nama;
+    this.nip = nip;
+    this.email = email;
+    this.objectName = DosenImpl.class.getName();
+  }
 
-	public DosenImpl(, String nama, String nip, String email) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = nama;
-		this.nip = nip;
-		this.email = email;
-	}
+  public DosenImpl(UUID id, String nama, String nip, String email) {
+    this.id = UUID.randomUUID();
+    this.nama = nama;
+    this.nip = nip;
+    this.email = email;
+    this.objectName = DosenImpl.class.getName();
+  }
 
-	public DosenImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = "";
-		this.nip = "";
-		this.email = "";
-	}
-
+  public DosenImpl() {
+    this.id = UUID.randomUUID();
+    this.nama = "";
+    this.nip = "";
+    this.email = "";
+    this.objectName = DosenImpl.class.getName();
+  }
 
 }

@@ -10,47 +10,60 @@ import javax.persistence.CascadeType;
 //add other required packages
 
 @MappedSuperclass
-public abstract class AdminAkademikDecorator extends AdminAkademikComponent{
-    @OneToOne(cascade=CascadeType.ALL)
-	protected AdminAkademikComponent record;
-		
-	public AdminAkademikDecorator (AdminAkademikComponent record) {
-		this.record = record;
-	}
+public abstract class AdminAkademikDecorator extends AdminAkademikComponent {
+  @OneToOne(cascade = CascadeType.ALL)
+  protected AdminAkademikComponent record;
 
-	public AdminAkademikDecorator (int id, AdminAkademikComponent record) {
-		this.id =  id;
-		this.record = record;
-	}
-	
-	public AdminAkademikDecorator(){
-		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
+  public AdminAkademikDecorator(AdminAkademikComponent record) {
+    this.id = UUID.randomUUID();
+    this.record = record;
+  }
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
-	public String getEmail() {
-		return record.getEmail();
-	}
-	public void setEmail(String email) {
-		record.setEmail(email);
-	}
-	public String getNama() {
-		return record.getNama();
-	}
-	public void setNama(String nama) {
-		record.setNama(nama);
-	}
+  public AdminAkademikDecorator(UUID id, AdminAkademikComponent record) {
+    this.id = id;
+    this.record = record;
+  }
 
+  public AdminAkademikDecorator() {
+    super();
+    this.id = UUID.randomUUID();
+    this.record = new AdminAkademikImpl();
+  }
 
-	public HashMap<String, Object> toHashMap() {
-        return this.record.toHashMap();
-    }
+  public AdminAkademikComponent getRecord() {
+    return this.record;
+  }
+
+  public void setRecord(AdminAkademikComponent record) {
+    this.record = record;
+  }
+
+  public UUID getId() {
+    return this.id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public String getNama() {
+    return record.getNama();
+  }
+
+  public void setNama(String nama) {
+    record.setNama(nama);
+  }
+
+  public String getEmail() {
+    return record.getEmail();
+  }
+
+  public void setEmail(String email) {
+    record.setEmail(email);
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    return this.record.toHashMap();
+  }
 
 }

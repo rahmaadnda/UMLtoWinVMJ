@@ -14,39 +14,41 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="semester_impl")
-@Table(name="semester_impl")
+@Entity(name = "semester_impl")
+@Table(name = "semester_impl")
 public class SemesterImpl extends SemesterComponent {
 
-	public SemesterImpl(UUID id, String kode, String status, String tanggalMulai, String tanggalSelesai, String deskripsi) {
-		this.id = id;
-		this.kode = kode;
-		this.status = status;
-		this.tanggalMulai = tanggalMulai;
-		this.tanggalSelesai = tanggalSelesai;
-		this.deskripsi = deskripsi;
-	}
+  public SemesterImpl(String kode, String status, String tanggalMulai, String tanggalSelesai, String deskripsi) {
+    this.id = UUID.randomUUID();
+    this.kode = kode;
+    this.status = status;
+    this.tanggalMulai = tanggalMulai;
+    this.tanggalSelesai = tanggalSelesai;
+    this.deskripsi = deskripsi;
+    this.objectName = SemesterImpl.class.getName();
+  }
 
-	public SemesterImpl(, String kode, String status, String tanggalMulai, String tanggalSelesai, String deskripsi) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = kode;
-		this.status = status;
-		this.tanggalMulai = tanggalMulai;
-		this.tanggalSelesai = tanggalSelesai;
-		this.deskripsi = deskripsi;
-	}
+  public SemesterImpl(UUID id, String kode, String status, String tanggalMulai, String tanggalSelesai,
+      String deskripsi) {
 
-	public SemesterImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = "";
-		this.status = "";
-		this.tanggalMulai = "";
-		this.tanggalSelesai = "";
-		this.deskripsi = "";
-	}
+    this.id = id;
+    this.kode = kode;
+    this.status = status;
+    this.tanggalMulai = tanggalMulai;
+    this.tanggalSelesai = tanggalSelesai;
+    this.deskripsi = deskripsi;
+    this.objectName = SemesterImpl.class.getName();
+  }
 
+  public SemesterImpl() {
+
+    this.id = UUID.randomUUID();
+    this.kode = "";
+    this.status = "";
+    this.tanggalMulai = "";
+    this.tanggalSelesai = "";
+    this.deskripsi = "";
+    this.objectName = SemesterImpl.class.getName();
+  }
 
 }

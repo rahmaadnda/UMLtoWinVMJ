@@ -14,28 +14,30 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.kurikulum.core.*;
+import siakreborn.semester.core.*;
 
-@Entity(name="kurikulumsemester_impl")
-@Table(name="kurikulumsemester_impl")
+@Entity(name = "kurikulum_semester_impl")
+@Table(name = "kurikulum_semester_impl")
 public class KurikulumSemesterImpl extends KurikulumSemesterComponent {
 
-	public KurikulumSemesterImpl(UUID id, KurikulumImpl kurikulumimpl, SemesterImpl semesterimpl) {
-		this.id = id;
-		this.kurikulumimpl = kurikulumimpl;
-		this.semesterimpl = semesterimpl;
-	}
+  public KurikulumSemesterImpl(UUID id, Kurikulum kurikulum, Semester semester) {
+    this.id = id;
+    this.kurikulum = kurikulum;
+    this.semester = semester;
+    this.objectName = KurikulumSemesterImpl.class.getName();
+  }
 
-	public KurikulumSemesterImpl(, KurikulumImpl kurikulumimpl, SemesterImpl semesterimpl) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kurikulumimpl = kurikulumimpl;
-		this.semesterimpl = semesterimpl;
-	}
+  public KurikulumSemesterImpl(Kurikulum kurikulum, Semester semester) {
+    this.id = UUID.randomUUID();
+    this.kurikulum = kurikulum;
+    this.semester = semester;
+    this.objectName = KurikulumSemesterImpl.class.getName();
+  }
 
-	public KurikulumSemesterImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
-
+  public KurikulumSemesterImpl() {
+    this.id = UUID.randomUUID();
+    this.objectName = KurikulumSemesterImpl.class.getName();
+  }
 
 }

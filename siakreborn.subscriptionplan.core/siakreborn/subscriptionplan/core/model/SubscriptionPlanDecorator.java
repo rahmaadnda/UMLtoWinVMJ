@@ -10,53 +10,68 @@ import javax.persistence.CascadeType;
 //add other required packages
 
 @MappedSuperclass
-public abstract class SubscriptionPlanDecorator extends SubscriptionPlanComponent{
-    @OneToOne(cascade=CascadeType.ALL)
-	protected SubscriptionPlanComponent record;
-		
-	public SubscriptionPlanDecorator (SubscriptionPlanComponent record) {
-		this.record = record;
-	}
+public abstract class SubscriptionPlanDecorator extends SubscriptionPlanComponent {
+  @OneToOne(cascade = CascadeType.ALL)
+  protected SubscriptionPlanComponent record;
 
-	public SubscriptionPlanDecorator (int id, SubscriptionPlanComponent record) {
-		this.id =  id;
-		this.record = record;
-	}
-	
-	public SubscriptionPlanDecorator(){
-		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
+  public SubscriptionPlanDecorator(SubscriptionPlanComponent record) {
+    this.id = UUID.randomUUID();
+    this.record = record;
+  }
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
-	public String getDeskripsi() {
-		return record.getDeskripsi();
-	}
-	public void setDeskripsi(String deskripsi) {
-		record.setDeskripsi(deskripsi);
-	}
-	public String getName() {
-		return record.getName();
-	}
-	public void setName(String name) {
-		record.setName(name);
-	}
-	public int getHarga() {
-		return record.getHarga();
-	}
-	public void setHarga(int harga) {
-		record.setHarga(harga);
-	}
+  public SubscriptionPlanDecorator(UUID id, SubscriptionPlanComponent record) {
+    this.id = id;
+    this.record = record;
+  }
 
+  public SubscriptionPlanDecorator() {
+    super();
+    this.id = UUID.randomUUID();
+    this.record = new SubscriptionPlanImpl();
+  }
 
-	public HashMap<String, Object> toHashMap() {
-        return this.record.toHashMap();
-    }
+  public SubscriptionPlanComponent getRecord() {
+    return this.record;
+  }
+
+  public void setRecord(SubscriptionPlanComponent record) {
+    this.record = record;
+  }
+
+  public UUID getId() {
+    return this.id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return record.getName();
+  }
+
+  public void setName(String name) {
+    record.setName(name);
+  }
+
+  public String getDeskripsi() {
+    return record.getDeskripsi();
+  }
+
+  public void setDeskripsi(String deskripsi) {
+    record.setDeskripsi(deskripsi);
+  }
+  
+  public int getHarga() {
+    return record.getHarga();
+  }
+
+  public void setHarga(int harga) {
+    record.setHarga(harga);
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    return this.record.toHashMap();
+  }
 
 }

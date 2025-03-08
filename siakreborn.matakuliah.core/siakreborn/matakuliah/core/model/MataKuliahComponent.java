@@ -9,85 +9,100 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
-@Entity
-@Table(name="matakuliah_comp")
+import siakreborn.kurikulum.core.*;
+import siakreborn.util.core.*;
+
+@Entity(name = "mata_kuliah_comp")
+@Table(name = "mata_kuliah_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class MataKuliahComponent implements MataKuliah{
-	@Id
-	protected UUID id; 
-	protected String kode;
-	protected String nama;
-	protected int sks;
-	protected int term;
-	@ManyToOne(targetEntity=siakreborn.kurikulum.core.KurikulumComponent.class)
-	public Kurikulum kurikulumimpl;
+public abstract class MataKuliahComponent implements MataKuliah {
+  @Id
+  protected UUID id;
+  protected String kode;
+  protected String nama;
+  protected int sks;
+  protected int term;
+  @ManyToOne(targetEntity = siakreborn.kurikulum.core.KurikulumComponent.class)
+  public Kurikulum kurikulum;
 
-	public MataKuliahComponent() {
+  protected String objectName = MataKuliahComponent.class.getName();
 
-	} 
+  public MataKuliahComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getKode() {
-		return this.kode;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setKode(String kode) {
-		this.kode = kode;
-	}
-	public String getNama() {
-		return this.nama;
-	}
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	public void setNama(String nama) {
-		this.nama = nama;
-	}
-	public int getSks() {
-		return this.sks;
-	}
+  public String getKode() {
+    return this.kode;
+  }
 
-	public void setSks(int sks) {
-		this.sks = sks;
-	}
-	public int getTerm() {
-		return this.term;
-	}
+  public void setKode(String kode) {
+    this.kode = kode;
+  }
 
-	public void setTerm(int term) {
-		this.term = term;
-	}
-	public abstract KurikulumImpl getKurikulumimpl();
-	public abstract void setKurikulumimpl(KurikulumImpl kurikulumimpl);
-	
- 
+  public String getNama() {
+    return this.nama;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " kode='" + getKode() + "'" +
-            " nama='" + getNama() + "'" +
-            " sks='" + getSks() + "'" +
-            " term='" + getTerm() + "'" +
-            " kurikulumimpl='" + getKurikulumimpl() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> matakuliahMap = new HashMap<String,Object>();
-		matakuliahMap.put("id",getId());
-		matakuliahMap.put("kode",getKode());
-		matakuliahMap.put("nama",getNama());
-		matakuliahMap.put("sks",getSks());
-		matakuliahMap.put("term",getTerm());
-		matakuliahMap.put("kurikulumimpl",getKurikulumimpl());
+  public void setNama(String nama) {
+    this.nama = nama;
+  }
 
-        return matakuliahMap;
-    }
+  public int getSks() {
+    return this.sks;
+  }
+
+  public void setSks(int sks) {
+    this.sks = sks;
+  }
+
+  public int getTerm() {
+    return this.term;
+  }
+
+  public void setTerm(int term) {
+    this.term = term;
+  }
+
+  public Kurikulum getKurikulum() {
+    return this.kurikulum;
+  }
+
+  public void setKurikulum(Kurikulum kurikulum) {
+    this.kurikulum = kurikulum;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " kode='" + getKode() + "'" +
+        " nama='" + getNama() + "'" +
+        " sks='" + getSks() + "'" +
+        " term='" + getTerm() + "'" +
+        " kurikulum='" + getKurikulum() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> Map = new HashMap<String, Object>();
+    Map.put("id", getId());
+    Map.put("kode", getKode());
+    Map.put("nama", getNama());
+    Map.put("name", getNama());
+    Map.put("sks", getSks());
+    Map.put("term", getTerm());
+    Map = Util.combine(Map, getKurikulum().toHashMap(), "kurikulum");
+
+    return Map;
+  }
 }

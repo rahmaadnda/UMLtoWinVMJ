@@ -14,30 +14,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="capaian_impl")
-@Table(name="capaian_impl")
+@Entity(name = "capaian_impl")
+@Table(name = "capaian_impl")
 public class CapaianImpl extends CapaianComponent {
 
-	public CapaianImpl(UUID id, String kode, String deskripsi) {
-		this.id = id;
-		this.kode = kode;
-		this.deskripsi = deskripsi;
-	}
+  public CapaianImpl(UUID id, String kode, String deskripsi) {
+    this.id = id;
+    this.kode = kode;
+    this.deskripsi = deskripsi;
+    this.objectName = CapaianImpl.class.getName();
+  }
 
-	public CapaianImpl(, String kode, String deskripsi) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = kode;
-		this.deskripsi = deskripsi;
-	}
+  public CapaianImpl(String kode, String deskripsi) {
+    this.id = UUID.randomUUID();
+    this.kode = kode;
+    this.deskripsi = deskripsi;
+    this.objectName = CapaianImpl.class.getName();
+  }
 
-	public CapaianImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = "";
-		this.deskripsi = "";
-	}
-
+  public CapaianImpl() {
+    this.id = UUID.randomUUID();
+    this.kode = "";
+    this.deskripsi = "";
+    this.objectName = CapaianImpl.class.getName();
+  }
 
 }

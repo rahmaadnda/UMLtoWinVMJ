@@ -14,39 +14,38 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="programstudi_impl")
-@Table(name="programstudi_impl")
+@Entity(name = "program_studi_impl")
+@Table(name = "program_studi_impl")
 public class ProgramStudiImpl extends ProgramStudiComponent {
 
-	public ProgramStudiImpl(UUID id, String kode, String noSK, String nama, String kaprodi, String jenjang) {
-		this.id = id;
-		this.kode = kode;
-		this.noSK = noSK;
-		this.nama = nama;
-		this.kaprodi = kaprodi;
-		this.jenjang = jenjang;
-	}
+  public ProgramStudiImpl(String kode, String noSK, String nama, String kaprodi, String jenjang) {
+    this.id = UUID.randomUUID();
+    this.kode = kode;
+    this.noSK = noSK;
+    this.nama = nama;
+    this.kaprodi = kaprodi;
+    this.jenjang = jenjang;
+    this.objectName = ProgramStudiImpl.class.getName();
+  }
 
-	public ProgramStudiImpl(, String kode, String noSK, String nama, String kaprodi, String jenjang) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = kode;
-		this.noSK = noSK;
-		this.nama = nama;
-		this.kaprodi = kaprodi;
-		this.jenjang = jenjang;
-	}
+  public ProgramStudiImpl(UUID id, String kode, String noSK, String nama, String kaprodi, String jenjang) {
+    this.id = id;
+    this.kode = kode;
+    this.noSK = noSK;
+    this.nama = nama;
+    this.kaprodi = kaprodi;
+    this.jenjang = jenjang;
+    this.objectName = ProgramStudiImpl.class.getName();
+  }
 
-	public ProgramStudiImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = "";
-		this.noSK = "";
-		this.nama = "";
-		this.kaprodi = "";
-		this.jenjang = "";
-	}
-
+  public ProgramStudiImpl() {
+    this.id = UUID.randomUUID();
+    this.kode = "";
+    this.noSK = "";
+    this.nama = "";
+    this.kaprodi = "";
+    this.jenjang = "";
+    this.objectName = ProgramStudiImpl.class.getName();
+  }
 
 }

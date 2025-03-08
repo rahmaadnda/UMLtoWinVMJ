@@ -1,96 +1,117 @@
 package siakreborn.kelasdosen.core;
+
 import java.util.*;
 
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import siakreborn.kelasdosen.KelasDosenFactory;
-import prices.auth.vmj.annotations.Restricted;
+import vmj.auth.annotations.Restricted;
 //add other required packages
+import siakreborn.dosen.core.Dosen;
+import siakreborn.dosen.core.DosenService;
+import siakreborn.dosen.core.DosenServiceImpl;
+import siakreborn.kelas.core.Kelas;
 
-public class KelasDosenResourceImpl extends KelasDosenResourceComponent{
+public class KelasDosenResourceImpl extends KelasDosenResourceComponent {
+  private KelasDosenFactory kelasDosenFactory = new KelasDosenFactory();
+  private KelasDosenService kelasDosenService = new KelasDosenServiceImpl();
+  private DosenService dosenService = new DosenServiceImpl();
 
-	// @Restriced(permission = "")
-    @Route(url="call/kelasdosen/save")
-    public List<HashMap<String,Object>> saveKelasDosen(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		KelasDosen kelasdosen = createKelasDosen(vmjExchange);
-		kelasdosenRepository.saveObject(kelasdosen);
-		return getAllKelasDosen(vmjExchange);
-	}
+  @Restricted(permissionName = "CreateKelasDosen")
+  @Route(url = "call/kelasdosen/save")
+  public List<HashMap<String, Object>> saveKelasDosen(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    public KelasDosen createKelasDosen(VMJExchange vmjExchange){
-		
-		//to do: fix association attributes
-		
-		KelasDosen kelasdosen = KelasDosenFactory.createKelasDosen("siakreborn.kelasdosen.core.KelasDosenImpl", id, dosenimpl, kelasimpl);
-			return kelasdosen;
-	}
+    List<KelasDosen> kelasDosenList = kelasDosenService
+        .saveKelasDosen((HashMap<String, Object>) vmjExchange.getPayload());
+    return kelasDosenService.transformKelasDosenListToHashMap(kelasDosenList);
+  }
 
-    public KelasDosen createKelasDosen(VMJExchange vmjExchange, int id){
-		
-		//to do: fix association attributes
-		
-		KelasDosen kelasdosen = KelasDosenFactory.createKelasDosen("siakreborn.kelasdosen.core.KelasDosenImpl", , dosenimpl, kelasimpl);
-			return kelasdosen;
-	}
+  @Restricted(permissionName = "UpdateKelasDosen")
+  @Route(url = "call/kelasdosen/update")
+  public HashMap<String, Object> updateKelasDosen(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    // @Restriced(permission = "")
-    @Route(url="call/kelasdosen/update")
-    public HashMap<String, Object> updateKelasDosen(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		
-		KelasDosen kelasdosen = kelasdosenRepository.getObject(id);
-		
-		kelasdosenRepository.updateObject(kelasdosen);
-		kelasdosen = kelasdosenRepository.getObject(id);
-		//to do: fix association attributes
-		
-		return kelasdosen.toHashMap();
-		
-	}
+    KelasDosen kelasDosen = kelasDosenService.updateKelasDosen((HashMap<String, Object>) vmjExchange.getPayload());
+    return kelasDosen.toHashMap();
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/kelasdosen/detail")
-    public HashMap<String, Object> getKelasDosen(VMJExchange vmjExchange){
-		String idStr = vmjExchange.getGETParam("id"); 
-		int id = Integer.parseInt(idStr);
-		KelasDosen kelasdosen = kelasdosenRepository.getObject(id);
-		return kelasdosen.toHashMap();
-	}
+  @Restricted(permissionName = "ReadKelasDosen")
+  @Route(url = "call/kelasdosen/detail")
+  public HashMap<String, Object> getKelasDosen(VMJExchange vmjExchange) {
+    String idStr = vmjExchange.getGETParam("id");
+    if(idStr == null) {
+      throw new IllegalArgumentException("Invalid UUID");
+    }
+    UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/kelasdosen/list")
-    public List<HashMap<String,Object>> getAllKelasDosen(VMJExchange vmjExchange){
-		List<KelasDosen> kelasdosenList = kelasdosenRepository.getAllObject("kelasdosen_impl");
-		return transformKelasDosenListToHashMap(kelasdosenList);
-	}
+    KelasDosen kelasDosen = kelasDosenService.getKelasDosen(id);
+    return kelasDosen.toHashMap();
+  }
 
-    public List<HashMap<String,Object>> transformKelasDosenListToHashMap(List<KelasDosen> kelasdosenList){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < kelasdosenList.size(); i++) {
-            resultList.add(kelasdosenList.get(i).toHashMap());
-        }
+  @Restricted(permissionName = "ReadKelasDosen")
+  @Route(url = "call/kelasdosen/kelas/detail")
+  public HashMap<String, Object> getKelasDetail(VMJExchange vmjExchange) {
+    String kelasIdStr = vmjExchange.getGETParam("kelasId");
+    UUID kelasId = UUID.fromString(kelasIdStr);
 
-        return resultList;
-	}
+    HashMap<String, Object> result = kelasDosenService.getKelasWithDosen(kelasId);
+    return result;
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/kelasdosen/delete")
-    public List<HashMap<String,Object>> deleteKelasDosen(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		kelasdosenRepository.deleteObject(id);
-		return getAllKelasDosen(vmjExchange);
-	}
+  @Restricted(permissionName = "ReadKelasDosenMe")
+  @Route(url = "call/kelasdosen/me/riwayat")
+  public List<HashMap<String, Object>> getRiwayatDosen(VMJExchange vmjExchange) {
+    String email = vmjExchange.getAuthPayload().getEmail();
+    Dosen dosen = dosenService.getDosenByEmail(email);
+    UUID mahasiswaId = dosen.getId();
+
+    return kelasDosenService.getRiwayatKelasDosen(mahasiswaId);
+  }
+
+  @Restricted(permissionName = "ReadKelasDosen")
+  @Route(url = "call/kelasdosen/list")
+  public List<HashMap<String, Object>> getAllKelasDosen(VMJExchange vmjExchange) {
+    List<KelasDosen> kelasDosenList = kelasDosenService.getAllKelasDosen();
+    return kelasDosenService.transformKelasDosenListToHashMap(kelasDosenList);
+  }
+
+  @Restricted(permissionName = "ReadKelasDosen")
+  @Route(url = "call/kelasdosen/filter")
+  public List<HashMap<String, Object>> filterKelasDosen(VMJExchange vmjExchange) {
+    String target = (String) vmjExchange.getGETParam("target");
+    String by = (String) vmjExchange.getGETParam("by");
+
+    if (target.equals("dosen") && by.equals("kelas")) {
+      String kelasIdStr = (String) vmjExchange.getGETParam("kelasId");
+      if(kelasIdStr == null) {
+        throw new IllegalArgumentException("Invalid UUID");
+      }
+      UUID kelasId = UUID.fromString(kelasIdStr);
+
+      List<Dosen> dosenList = kelasDosenService.filterDosenByKelas(kelasId);
+      return kelasDosenService.transformDosenListToHashMap(dosenList);
+    }
+
+    return new ArrayList<>();
+  }
+
+  @Restricted(permissionName = "DeleteKelasDosen")
+  @Route(url = "call/kelasdosen/delete")
+  public List<HashMap<String, Object>> deleteKelasDosen(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
+
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
+
+    List<KelasDosen> kelasDosenList = kelasDosenService.deleteKelasDosen(id);
+    return kelasDosenService.transformKelasDosenListToHashMap(kelasDosenList);
+  }
 
 }

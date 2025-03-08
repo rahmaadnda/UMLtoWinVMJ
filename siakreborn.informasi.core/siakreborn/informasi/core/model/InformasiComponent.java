@@ -9,67 +9,73 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Column;
 
-@Entity
-@Table(name="informasi_comp")
+@Entity(name = "informasi_comp")
+@Table(name = "informasi_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class InformasiComponent implements Informasi{
-	@Id
-	protected UUID id; 
-	protected String judul;
-	protected String deskripsi;
-	protected Date tanggalPublikasi;
+public abstract class InformasiComponent implements Informasi {
+    @Id
+    protected UUID id;
+    protected String judul;
 
-	public InformasiComponent() {
+    @Column(columnDefinition = "TEXT")
+    protected String deskripsi;
+    protected Date tanggalPublikasi;
 
-	} 
+    protected String objectName = InformasiComponent.class.getName();
 
-	public String getJudul() {
-		return this.judul;
-	}
+    public InformasiComponent() {
+    }
 
-	public void setJudul(String judul) {
-		this.judul = judul;
-	}
-	public UUID getId() {
-		return this.id;
-	}
+    public UUID getId() {
+        return this.id;
+    }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getDeskripsi() {
-		return this.deskripsi;
-	}
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-	public void setDeskripsi(String deskripsi) {
-		this.deskripsi = deskripsi;
-	}
-	public Date getTanggalPublikasi() {
-		return this.tanggalPublikasi;
-	}
+    public String getJudul() {
+        return this.judul;
+    }
 
-	public void setTanggalPublikasi(Date tanggalPublikasi) {
-		this.tanggalPublikasi = tanggalPublikasi;
-	}
- 
+    public void setJudul(String judul) {
+        this.judul = judul;
+    }
 
-	@Override
+    public String getDeskripsi() {
+        return this.deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public Date getTanggalPublikasi() {
+        return this.tanggalPublikasi;
+    }
+
+    public void setTanggalPublikasi(Date tanggalPublikasi) {
+        this.tanggalPublikasi = tanggalPublikasi;
+    }
+
+    @Override
     public String toString() {
         return "{" +
-            " judul='" + getJudul() + "'" +
-            " id='" + getId() + "'" +
-            " deskripsi='" + getDeskripsi() + "'" +
-            " tanggalPublikasi='" + getTanggalPublikasi() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", judul='" + getJudul() + "'" +
+                ", deskripsi='" + getDeskripsi() + "'" +
+                ", tanggalPublikasi='" + getTanggalPublikasi() + "'" +
+                "}";
     }
-	
+
     public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> informasiMap = new HashMap<String,Object>();
-		informasiMap.put("judul",getJudul());
-		informasiMap.put("id",getId());
-		informasiMap.put("deskripsi",getDeskripsi());
-		informasiMap.put("tanggalPublikasi",getTanggalPublikasi());
+        HashMap<String, Object> informasiMap = new HashMap<>();
+        informasiMap.put("id", getId());
+        informasiMap.put("judul", getJudul());
+        informasiMap.put("deskripsi", getDeskripsi());
+        informasiMap.put("tanggalPublikasi", getTanggalPublikasi());
 
         return informasiMap;
     }

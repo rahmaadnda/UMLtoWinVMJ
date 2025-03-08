@@ -10,57 +10,62 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="adminakademik_comp")
+@Entity(name = "adminakademik_comp")
+@Table(name = "adminakademik_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AdminAkademikComponent implements AdminAkademik{
-	@Id
-	protected UUID id; 
-	protected String email;
-	protected String nama;
+public abstract class AdminAkademikComponent implements AdminAkademik {
+  @Id
+  protected UUID id;
+  protected String nama;
+  protected String email;
 
-	public AdminAkademikComponent() {
+  protected String objectName = AdminAkademikComponent.class.getName();
 
-	} 
+  public AdminAkademikComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getEmail() {
-		return this.email;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getNama() {
-		return this.nama;
-	}
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	public void setNama(String nama) {
-		this.nama = nama;
-	}
- 
+  public String getNama() {
+    return this.nama;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " email='" + getEmail() + "'" +
-            " nama='" + getNama() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> adminakademikMap = new HashMap<String,Object>();
-		adminakademikMap.put("id",getId());
-		adminakademikMap.put("email",getEmail());
-		adminakademikMap.put("nama",getNama());
+  public void setNama(String nama) {
+    this.nama = nama;
+  }
 
-        return adminakademikMap;
-    }
+  public String getEmail() {
+    return this.email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " nama='" + getNama() + "'" +
+        " email='" + getEmail() + "'" +
+        " name='" + getNama() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> adminAkademikMap = new HashMap<String, Object>();
+    adminAkademikMap.put("id", getId());
+    adminAkademikMap.put("nama", getNama());
+    adminAkademikMap.put("name", getNama());
+    adminAkademikMap.put("email", getEmail());
+
+    return adminAkademikMap;
+  }
 }

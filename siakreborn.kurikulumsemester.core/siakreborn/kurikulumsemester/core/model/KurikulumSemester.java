@@ -1,14 +1,24 @@
 package siakreborn.kurikulumsemester.core;
+
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import java.util.*;
 
+import siakreborn.kurikulum.core.Kurikulum;
+import siakreborn.semester.core.Semester;
+
 public interface KurikulumSemester {
-	public UUID getId();
-	public void setId(UUID id);
-	public KurikulumImpl getKurikulumimpl();
-	public void setKurikulumimpl(KurikulumImpl kurikulumimpl);
-	public SemesterImpl getSemesterimpl();
-	public void setSemesterimpl(SemesterImpl semesterimpl);
-	HashMap<String, Object> toHashMap();
+  UUID getId();
+
+  void setId(UUID id);
+
+  Kurikulum getKurikulum();
+
+  void setKurikulum(Kurikulum kurikulum);
+
+  Semester getSemester();
+
+  void setSemester(Semester semester);
+
+  HashMap<String, Object> toHashMap();
 }

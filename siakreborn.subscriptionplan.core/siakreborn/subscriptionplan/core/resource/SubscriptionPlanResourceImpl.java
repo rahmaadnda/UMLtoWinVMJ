@@ -1,108 +1,66 @@
 package siakreborn.subscriptionplan.core;
+
 import java.util.*;
 
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import siakreborn.subscriptionplan.SubscriptionPlanFactory;
-import prices.auth.vmj.annotations.Restricted;
+import vmj.auth.annotations.Restricted;
 //add other required packages
 
-public class SubscriptionPlanResourceImpl extends SubscriptionPlanResourceComponent{
+public class SubscriptionPlanResourceImpl extends SubscriptionPlanResourceComponent {
+  SubscriptionPlanService subscriptionPlanService = new SubscriptionPlanServiceImpl();
 
-	// @Restriced(permission = "")
-    @Route(url="call/subscriptionplan/save")
-    public List<HashMap<String,Object>> saveSubscriptionPlan(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		SubscriptionPlan subscriptionplan = createSubscriptionPlan(vmjExchange);
-		subscriptionplanRepository.saveObject(subscriptionplan);
-		return getAllSubscriptionPlan(vmjExchange);
-	}
+  @Restricted(permissionName = "CreateSubscriptionPlan")
+  @Route(url = "call/subscriptionplan/save")
+  public List<HashMap<String, Object>> saveSubscriptionPlan(VMJExchange vmjExchange) {
+    List<SubscriptionPlan> listSubscriptionPlan = subscriptionPlanService.saveSubscriptionPlan((HashMap<String, Object>) vmjExchange.getPayload());
+    return subscriptionPlanService.transformSubscriptionPlanListToHashMap(listSubscriptionPlan);
+  }
 
-    public SubscriptionPlan createSubscriptionPlan(VMJExchange vmjExchange){
-		String deskripsi = (String) vmjExchange.getRequestBodyForm("deskripsi");
-		String name = (String) vmjExchange.getRequestBodyForm("name");
-		String hargaStr = (String) vmjExchange.getRequestBodyForm("harga");
-		int harga = Integer.parseInt(hargaStr);
-		
-		//to do: fix association attributes
-		
-		SubscriptionPlan subscriptionplan = SubscriptionPlanFactory.createSubscriptionPlan("siakreborn.subscriptionplan.core.SubscriptionPlanImpl", id, deskripsi, name, harga);
-			return subscriptionplan;
-	}
+  @Restricted(permissionName = "UpdateSubscriptionPlan")
+  @Route(url = "call/subscriptionplan/update")
+  public HashMap<String, Object> updateSubscriptionPlan(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    public SubscriptionPlan createSubscriptionPlan(VMJExchange vmjExchange, int id){
-		String deskripsi = (String) vmjExchange.getRequestBodyForm("deskripsi");
-		String name = (String) vmjExchange.getRequestBodyForm("name");
-		String hargaStr = (String) vmjExchange.getRequestBodyForm("harga");
-		int harga = Integer.parseInt(hargaStr);
-		
-		//to do: fix association attributes
-		
-		SubscriptionPlan subscriptionplan = SubscriptionPlanFactory.createSubscriptionPlan("siakreborn.subscriptionplan.core.SubscriptionPlanImpl", , deskripsi, name, harga);
-			return subscriptionplan;
-	}
+    SubscriptionPlan subscriptionplan = subscriptionPlanService.updateSubscriptionPlan((HashMap<String, Object>) vmjExchange.getPayload());
+    return subscriptionplan.toHashMap();
+  }
 
-    // @Restriced(permission = "")
-    @Route(url="call/subscriptionplan/update")
-    public HashMap<String, Object> updateSubscriptionPlan(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		
-		SubscriptionPlan subscriptionplan = subscriptionplanRepository.getObject(id);
-		subscriptionplan.setDeskripsi((String) vmjExchange.getRequestBodyForm("deskripsi"));
-		subscriptionplan.setName((String) vmjExchange.getRequestBodyForm("name"));
-		String hargaStr = (String) vmjExchange.getRequestBodyForm("harga");
-		subscriptionplan.setHarga(Integer.parseInt(hargaStr));
-		
-		subscriptionplanRepository.updateObject(subscriptionplan);
-		subscriptionplan = subscriptionplanRepository.getObject(id);
-		//to do: fix association attributes
-		
-		return subscriptionplan.toHashMap();
-		
-	}
+  @Restricted(permissionName = "ReadSubscriptionPlan")
+  @Route(url = "call/subscriptionplan/detail")
+  public HashMap<String, Object> getSubscriptionPlan(VMJExchange vmjExchange) {
+    String idStr = vmjExchange.getGETParam("id");
+    if(idStr == null) {
+      throw new IllegalArgumentException("Invalid UUID");
+    }
+    UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/subscriptionplan/detail")
-    public HashMap<String, Object> getSubscriptionPlan(VMJExchange vmjExchange){
-		String idStr = vmjExchange.getGETParam("id"); 
-		int id = Integer.parseInt(idStr);
-		SubscriptionPlan subscriptionplan = subscriptionplanRepository.getObject(id);
-		return subscriptionplan.toHashMap();
-	}
+    SubscriptionPlan subscriptionplan = subscriptionPlanService.getSubscriptionPlan(id);
+    return subscriptionplan.toHashMap();
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/subscriptionplan/list")
-    public List<HashMap<String,Object>> getAllSubscriptionPlan(VMJExchange vmjExchange){
-		List<SubscriptionPlan> subscriptionplanList = subscriptionplanRepository.getAllObject("subscriptionplan_impl");
-		return transformSubscriptionPlanListToHashMap(subscriptionplanList);
-	}
+  @Restricted(permissionName = "ReadSubscriptionPlan")
+  @Route(url = "call/subscriptionplan/list")
+  public List<HashMap<String, Object>> getAllSubscriptionPlan(VMJExchange vmjExchange) {
+    List<SubscriptionPlan> subscriptionplanList = subscriptionPlanService.getAllSubscriptionPlan();
+    return subscriptionPlanService.transformSubscriptionPlanListToHashMap(subscriptionplanList);
+  }
 
-    public List<HashMap<String,Object>> transformSubscriptionPlanListToHashMap(List<SubscriptionPlan> subscriptionplanList){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < subscriptionplanList.size(); i++) {
-            resultList.add(subscriptionplanList.get(i).toHashMap());
-        }
+  @Restricted(permissionName = "DeleteSubscriptionPlan")
+  @Route(url = "call/subscriptionplan/delete")
+  public List<HashMap<String, Object>> deleteSubscriptionPlan(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-        return resultList;
-	}
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/subscriptionplan/delete")
-    public List<HashMap<String,Object>> deleteSubscriptionPlan(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		subscriptionplanRepository.deleteObject(id);
-		return getAllSubscriptionPlan(vmjExchange);
-	}
+    List<SubscriptionPlan> subscriptionplanList = subscriptionPlanService.deleteSubscriptionPlan(id);
+    return subscriptionPlanService.transformSubscriptionPlanListToHashMap(subscriptionplanList);
+  }
 
 }

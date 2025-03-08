@@ -1,91 +1,173 @@
 package siakreborn.observer.alumni;
 
-import java.util.*;
-import vmj.routing.route.Route;
-import vmj.routing.route.VMJExchange;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-
 import siakreborn.observer.core.ObserverDecorator;
 import siakreborn.observer.core.Observer;
 import siakreborn.observer.core.ObserverComponent;
 
-@Entity(name="observer_alumni")
-@Table(name="observer_alumni")
+import siakreborn.mahasiswa.core.Mahasiswa;
+import siakreborn.util.core.Util;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+import javax.persistence.OneToOne;
+
+import java.util.*;
+
+@Entity(name = "observer_alumni")
+@Table(name = "observer_alumni")
 public class ObserverImpl extends ObserverDecorator {
 
-	protected String portofolioUrl;
-	protected String linkedinUrl;
-	protected String npm;
-	protected String pekerjaan;
-	protected String tempatKerja;
-	protected int tahunLulus;
-	protected boolean isPublic;
-	public ObserverImpl(ObserverComponent record, String portofolioUrl, String linkedinUrl, String npm, String pekerjaan, String tempatKerja, int tahunLulus, boolean isPublic, MahasiswaImpl mahasiswaimpl) {
-		super(record);
-		this.portofolioUrl = portofolioUrl;
-		this.linkedinUrl = linkedinUrl;
-		this.npm = npm;
-		this.pekerjaan = pekerjaan;
-		this.tempatKerja = tempatKerja;
-		this.tahunLulus = tahunLulus;
-		this.isPublic = isPublic;
-	}
+    @OneToOne(targetEntity = siakreborn.mahasiswa.core.MahasiswaComponent.class)
+    public Mahasiswa mahasiswa;
 
-	public String getPortofolioUrl() {
-		return this.portofolioUrl;
-	}
+    public String portofolioUrl;
+    public String linkedinUrl;
+    public String npm;
+    public int tahunLulus;
+    public String pekerjaan;
+    public String tempatKerja;
+    public boolean isPublic; 
 
-	public void setPortofolioUrl(String portofolioUrl) {
-		this.portofolioUrl = portofolioUrl;
-	}
-	public String getLinkedinUrl() {
-		return this.linkedinUrl;
-	}
+    public ObserverImpl() {
+        super();
+        this.portofolioUrl = "";
+        this.isPublic = false; 
+        this.objectName = ObserverImpl.class.getName();
+    }
 
-	public void setLinkedinUrl(String linkedinUrl) {
-		this.linkedinUrl = linkedinUrl;
-	}
-	public String getNpm() {
-		return this.npm;
-	}
+    public ObserverImpl(Mahasiswa mahasiswa, String portofolioUrl, String linkedinUrl, String npm, int tahunLulus, String pekerjaan, String tempatKerja, boolean isPublic) {
+        super();
+        this.mahasiswa = mahasiswa;
+        this.portofolioUrl = portofolioUrl;
+        this.linkedinUrl = linkedinUrl;
+        this.npm = npm;
+        this.tahunLulus = tahunLulus;
+        this.pekerjaan = pekerjaan;
+        this.tempatKerja = tempatKerja;
+        this.isPublic = isPublic; 
+        this.objectName = ObserverImpl.class.getName();
+    }
 
-	public void setNpm(String npm) {
-		this.npm = npm;
-	}
-	public String getPekerjaan() {
-		return this.pekerjaan;
-	}
+    public ObserverImpl(ObserverComponent record, Mahasiswa mahasiswa, String portofolioUrl, String linkedinUrl, String npm, int tahunLulus, String pekerjaan, String tempatKerja, boolean isPublic) {
+        super(record);
+        this.mahasiswa = mahasiswa;
+        this.portofolioUrl = portofolioUrl;
+        this.linkedinUrl = linkedinUrl;
+        this.npm = npm;
+        this.tahunLulus = tahunLulus;
+        this.pekerjaan = pekerjaan;
+        this.tempatKerja = tempatKerja;
+        this.isPublic = isPublic; 
+        this.objectName = ObserverImpl.class.getName();
+    }
 
-	public void setPekerjaan(String pekerjaan) {
-		this.pekerjaan = pekerjaan;
-	}
-	public String getTempatKerja() {
-		return this.tempatKerja;
-	}
+    public ObserverImpl(UUID id, ObserverComponent record, Mahasiswa mahasiswa, String portofolioUrl, String linkedinUrl, String npm, int tahunLulus, String pekerjaan, String tempatKerja, boolean isPublic) {
+        super(id, record);
+        this.mahasiswa = mahasiswa;
+        this.portofolioUrl = portofolioUrl;
+        this.linkedinUrl = linkedinUrl;
+        this.npm = npm;
+        this.tahunLulus = tahunLulus;
+        this.pekerjaan = pekerjaan;
+        this.tempatKerja = tempatKerja;
+        this.isPublic = isPublic; 
+        this.objectName = ObserverImpl.class.getName();
+    }
 
-	public void setTempatKerja(String tempatKerja) {
-		this.tempatKerja = tempatKerja;
-	}
-	public int getTahunLulus() {
-		return this.tahunLulus;
-	}
+    public Mahasiswa getMahasiswa() {
+        return mahasiswa;
+    }
 
-	public void setTahunLulus(int tahunLulus) {
-		this.tahunLulus = tahunLulus;
-	}
-	public boolean getIsPublic() {
-		return this.isPublic;
-	}
+    public void setMahasiswa(Mahasiswa mahasiswa) {
+        this.mahasiswa = mahasiswa;
+    }
 
-	public void setIsPublic(boolean isPublic) {
-		this.isPublic = isPublic;
-	}
+    public String getPortofolioUrl() {
+        return portofolioUrl;
+    }
 
-	public HashMap<String, Object> verify(VMJExchange vmjExchange) {
-		// TODO: implement this method
-	}
+    public void setPortofolioUrl(String portofolioUrl) {
+        this.portofolioUrl = portofolioUrl;
+    }
 
+    public String getLinkedinUrl() {
+        return linkedinUrl;
+    }
+
+    public void setLinkedinUrl(String linkedinUrl) {
+        this.linkedinUrl = linkedinUrl;
+    }
+
+    public String getNpm() {
+        return npm;
+    }
+
+    public void setNpm(String npm) {
+        this.npm = npm;
+    }
+
+    public int getTahunLulus() {
+        return tahunLulus;
+    }
+
+    public void setTahunLulus(int tahunLulus) {
+        this.tahunLulus = tahunLulus;
+    }
+
+    public String getPekerjaan() {
+        return pekerjaan;
+    }
+
+    public void setPekerjaan(String pekerjaan) {
+        this.pekerjaan = pekerjaan;
+    }
+
+    public String getTempatKerja() {
+        return tempatKerja;
+    }
+
+    public void setTempatKerja(String tempatKerja) {
+        this.tempatKerja = tempatKerja;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", record='" + getRecord() + "'" +
+            ", portofolioUrl='" + getPortofolioUrl() + "'" +
+            ", linkedinUrl='" + getLinkedinUrl() + "'" +
+            ", npm='" + getNpm() + "'" +
+            ", tahunLulus='" + getTahunLulus() + "'" +
+            ", pekerjaan='" + getPekerjaan() + "'" +
+            ", tempatKerja='" + getTempatKerja() + "'" +
+            ", isPublic='" + isPublic + "'" + // Tambahkan isPublic di toString
+            "}";
+    }
+
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> observerMap = record.toHashMap();
+        observerMap.put("id", this.getId());
+        observerMap = Util.combine(observerMap, this.getMahasiswa().toHashMap(), "mahasiswa");
+        observerMap.put("portofolioUrl", this.getPortofolioUrl());
+        observerMap.put("linkedinUrl", this.getLinkedinUrl());
+        observerMap.put("npm", this.getNpm());
+        observerMap.put("tahunLulus", this.getTahunLulus());
+        observerMap.put("pekerjaan", this.getPekerjaan());
+        observerMap.put("tempatKerja", this.getTempatKerja());
+        observerMap.put("isPublic", this.isPublic());
+        observerMap.put("isPublicString", String.valueOf(this.isPublic()));
+        return observerMap;
+    }
 }

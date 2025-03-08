@@ -9,73 +9,90 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
-@Entity
-@Table(name="rencanastudi_comp")
+import siakreborn.mahasiswa.core.Mahasiswa;
+import siakreborn.semester.core.Semester;
+import siakreborn.util.core.*;
+
+@Entity(name = "rencana_studi_comp")
+@Table(name = "rencana_studi_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class RencanaStudiComponent implements RencanaStudi{
-	@Id
-	protected UUID id; 
-	@ManyToOne(targetEntity=siakreborn.mahasiswa.core.MahasiswaComponent.class)
-	public Mahasiswa mahasiswaimpl;
-	@ManyToOne(targetEntity=siakreborn.semester.core.SemesterComponent.class)
-	public Semester semesterimpl;
-	protected int totalSKS;
-	protected String status;
+public abstract class RencanaStudiComponent implements RencanaStudi {
+  @Id
+  protected UUID id;
+  @ManyToOne(targetEntity = siakreborn.mahasiswa.core.MahasiswaComponent.class)
+  public Mahasiswa mahasiswa;
+  @ManyToOne(targetEntity = siakreborn.semester.core.SemesterComponent.class)
+  public Semester semester;
+  protected int totalSKS;
+  protected String status;
 
-	public RencanaStudiComponent() {
+  protected String objectName = RencanaStudiComponent.class.getName();
 
-	} 
+  public RencanaStudiComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public abstract MahasiswaImpl getMahasiswaimpl();
-	public abstract void setMahasiswaimpl(MahasiswaImpl mahasiswaimpl);
-	
-	public abstract SemesterImpl getSemesterimpl();
-	public abstract void setSemesterimpl(SemesterImpl semesterimpl);
-	
-	public int getTotalSKS() {
-		return this.totalSKS;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setTotalSKS(int totalSKS) {
-		this.totalSKS = totalSKS;
-	}
-	public String getStatus() {
-		return this.status;
-	}
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
- 
-	public abstract void cekPembayaran();
+  public Mahasiswa getMahasiswa() {
+    return this.mahasiswa;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " mahasiswaimpl='" + getMahasiswaimpl() + "'" +
-            " semesterimpl='" + getSemesterimpl() + "'" +
-            " totalSKS='" + getTotalSKS() + "'" +
-            " status='" + getStatus() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> rencanastudiMap = new HashMap<String,Object>();
-		rencanastudiMap.put("id",getId());
-		rencanastudiMap.put("mahasiswaimpl",getMahasiswaimpl());
-		rencanastudiMap.put("semesterimpl",getSemesterimpl());
-		rencanastudiMap.put("totalSKS",getTotalSKS());
-		rencanastudiMap.put("status",getStatus());
+  public void setMahasiswa(Mahasiswa mahasiswa) {
+    this.mahasiswa = mahasiswa;
+  }
 
-        return rencanastudiMap;
-    }
+  public Semester getSemester() {
+    return this.semester;
+  }
+
+  public void setSemester(Semester semester) {
+    this.semester = semester;
+  }
+
+  public int getTotalSKS() {
+    return this.totalSKS;
+  }
+
+  public void setTotalSKS(int totalSKS) {
+    this.totalSKS = totalSKS;
+  }
+
+  public String getStatus() {
+    return this.status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " mahasiswa='" + getMahasiswa() + "'" +
+        " semester='" + getSemester() + "'" +
+        " totalSKS='" + getTotalSKS() + "'" +
+        " status='" + getStatus() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> rencanastudiMap = new HashMap<String, Object>();
+    rencanastudiMap.put("id", getId());
+    rencanastudiMap.put("totalSKS", getTotalSKS());
+    rencanastudiMap.put("status", getStatus());
+    rencanastudiMap = Util.combine(rencanastudiMap, getMahasiswa().toHashMap(), "mahasiswa");
+    rencanastudiMap = Util.combine(rencanastudiMap, getSemester().toHashMap(), "semester");
+
+    return rencanastudiMap;
+  }
 }

@@ -1,93 +1,122 @@
 package siakreborn.subscription.core;
 
 import java.util.*;
-import vmj.routing.route.Route;
-import vmj.routing.route.VMJExchange;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
-@Entity
-@Table(name="subscription_comp")
+import siakreborn.subscription.core.*;
+import siakreborn.util.core.*;
+
+import siakreborn.subscriptionplan.core.*;
+import siakreborn.util.core.*;
+
+@Entity(name = "subscription_comp")
+@Table(name = "subscription_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class SubscriptionComponent implements Subscription{
-	@Id
-	protected UUID id; 
-	protected String status;
-	protected Date startDate;
-	protected Date endDate;
-	protected Date requestDate;
-	@ManyToOne(targetEntity=siakreborn.subscriptionplan.core.SubscriptionPlanComponent.class)
-	public SubscriptionPlan subscriptionplanimpl;
+public abstract class SubscriptionComponent implements Subscription {
+  @Id
+  protected UUID id;
+  protected Date startDate;
+  protected Date endDate;
+  protected Date requestDate;
+  protected String status;
 
-	public SubscriptionComponent() {
+  @ManyToOne(targetEntity = siakreborn.subscriptionplan.core.SubscriptionPlanComponent.class)
+  public SubscriptionPlan subscriptionPlan;
 
-	} 
+  protected String objectName = SubscriptionComponent.class.getName();
 
-	public UUID getId() {
-		return this.id;
-	}
+  public SubscriptionComponent() {
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getStatus() {
-		return this.status;
-	}
+  @Override
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public Date getStartDate() {
-		return this.startDate;
-	}
+  @Override
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getEndDate() {
-		return this.endDate;
-	}
+  @Override
+  public Date getStartDate() {
+    return this.startDate;
+  }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	public Date getRequestDate() {
-		return this.requestDate;
-	}
+  @Override
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
 
-	public void setRequestDate(Date requestDate) {
-		this.requestDate = requestDate;
-	}
-	public abstract SubscriptionPlanImpl getSubscriptionplanimpl();
-	public abstract void setSubscriptionplanimpl(SubscriptionPlanImpl subscriptionplanimpl);
-	
- 
+  @Override
+  public Date getEndDate() {
+    return this.endDate;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " status='" + getStatus() + "'" +
-            " startDate='" + getStartDate() + "'" +
-            " endDate='" + getEndDate() + "'" +
-            " requestDate='" + getRequestDate() + "'" +
-            " subscriptionplanimpl='" + getSubscriptionplanimpl() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> subscriptionMap = new HashMap<String,Object>();
-		subscriptionMap.put("id",getId());
-		subscriptionMap.put("status",getStatus());
-		subscriptionMap.put("startDate",getStartDate());
-		subscriptionMap.put("endDate",getEndDate());
-		subscriptionMap.put("requestDate",getRequestDate());
-		subscriptionMap.put("subscriptionplanimpl",getSubscriptionplanimpl());
+  @Override
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
 
-        return subscriptionMap;
-    }
+  @Override
+  public Date getRequestDate() {
+    return this.requestDate;
+  }
+
+  @Override
+  public void setRequestDate(Date requestDate) {
+    this.requestDate = requestDate;
+  }
+
+  @Override
+  public String getStatus() {
+    return this.status;
+  }
+
+  @Override
+  public void setStatus(String status) {
+    this.status = status;
+  }
+  
+  @Override
+  public SubscriptionPlan getSubscriptionPlan() {
+    return this.subscriptionPlan;
+  }
+
+  @Override
+  public void setSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
+    this.subscriptionPlan = subscriptionPlan;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        ", startDate='" + getStartDate() + "'" +
+        ", endDate='" + getEndDate() + "'" +
+        ", requestDate='" + getRequestDate() + "'" +
+        ", status='" + getStatus() + "'" +
+        ", subsriptionPlan='" + getSubscriptionPlan() + "'" +
+        "}";
+  }
+
+  @Override
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> subscriptionMap = new HashMap<>();
+    subscriptionMap.put("id", getId());
+    subscriptionMap.put("startDate", getStartDate());
+    subscriptionMap.put("endDate", getEndDate());
+    subscriptionMap.put("requestDate", getRequestDate());
+    subscriptionMap.put("status", getStatus());
+    if (getSubscriptionPlan() != null)
+      subscriptionMap = Util.combine(subscriptionMap, ((SubscriptionPlanComponent) this.getSubscriptionPlan()).toHashMap(), "subscriptionplan");
+
+    return subscriptionMap;
+  }
+
 }

@@ -8,43 +8,64 @@ import javax.persistence.OneToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.CascadeType;
 //add other required packages
+import siakreborn.komponenpenilaian.core.KomponenPenilaian;
+import siakreborn.mahasiswa.core.Mahasiswa;
 
 @MappedSuperclass
-public abstract class PenilaianDecorator extends PenilaianComponent{
-    @OneToOne(cascade=CascadeType.ALL)
-	protected PenilaianComponent record;
-		
-	public PenilaianDecorator (PenilaianComponent record) {
-		this.record = record;
-	}
+public abstract class PenilaianDecorator extends PenilaianComponent {
+  @OneToOne(cascade = CascadeType.ALL)
+  protected PenilaianComponent record;
 
-	public PenilaianDecorator (int id, PenilaianComponent record) {
-		this.id =  id;
-		this.record = record;
-	}
-	
-	public PenilaianDecorator(){
-		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
+  public PenilaianDecorator(PenilaianComponent record) {
+    this.record = record;
+    this.id = UUID.randomUUID();
+  }
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
-	public int getNilai() {
-		return record.getNilai();
-	}
-	public void setNilai(int nilai) {
-		record.setNilai(nilai);
-	}
+  public PenilaianDecorator(UUID id, PenilaianComponent record) {
+    this.id = id;
+    this.record = record;
+  }
 
+  public PenilaianDecorator() {
+    super();
+    this.record = new PenilaianImpl();
+    this.id = UUID.randomUUID();
+  }
 
-	public HashMap<String, Object> toHashMap() {
-        return this.record.toHashMap();
-    }
+  public PenilaianComponent getRecord() {
+    return this.record;
+  }
+
+  public void setRecord(PenilaianComponent record) {
+    this.record = record;
+  }
+
+  public Mahasiswa getMahasiswa() {
+    return record.getMahasiswa();
+  }
+
+  public void setMahasiswa(Mahasiswa mahasiswa) {
+    record.setMahasiswa(mahasiswa);
+  }
+
+  public int getNilai() {
+    return record.getNilai();
+  }
+
+  public void setNilai(int nilai) {
+    record.setNilai(nilai);
+  }
+
+  public KomponenPenilaian getKomponenPenilaian() {
+    return this.record.getKomponenPenilaian();
+  }
+
+  public void setKomponenPenilaian(KomponenPenilaian komponenPenilaian) {
+    this.record.setKomponenPenilaian(komponenPenilaian);
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    return this.record.toHashMap();
+  }
 
 }

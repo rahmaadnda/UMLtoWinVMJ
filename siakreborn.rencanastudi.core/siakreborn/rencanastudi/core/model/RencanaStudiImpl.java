@@ -14,37 +14,36 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.mahasiswa.core.Mahasiswa;
+import siakreborn.semester.core.Semester;
 
-@Entity(name="rencanastudi_impl")
-@Table(name="rencanastudi_impl")
+@Entity(name = "rencana_studi_impl")
+@Table(name = "rencana_studi_impl")
 public class RencanaStudiImpl extends RencanaStudiComponent {
 
-	public RencanaStudiImpl(UUID id, MahasiswaImpl mahasiswaimpl, SemesterImpl semesterimpl, int totalSKS, String status) {
-		this.id = id;
-		this.mahasiswaimpl = mahasiswaimpl;
-		this.semesterimpl = semesterimpl;
-		this.totalSKS = totalSKS;
-		this.status = status;
-	}
+  public RencanaStudiImpl(Mahasiswa mahasiswa, Semester semester, int totalSKS, String status) {
+    this.id = UUID.randomUUID();
+    this.mahasiswa = mahasiswa;
+    this.semester = semester;
+    this.totalSKS = totalSKS;
+    this.status = status;
+    this.objectName = RencanaStudiImpl.class.getName();
+  }
 
-	public RencanaStudiImpl(, MahasiswaImpl mahasiswaimpl, SemesterImpl semesterimpl, int totalSKS, String status) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.mahasiswaimpl = mahasiswaimpl;
-		this.semesterimpl = semesterimpl;
-		this.totalSKS = totalSKS;
-		this.status = status;
-	}
+  public RencanaStudiImpl(UUID id, Mahasiswa mahasiswa, Semester semester, int totalSKS, String status) {
+    this.id = id;
+    this.mahasiswa = mahasiswa;
+    this.semester = semester;
+    this.totalSKS = totalSKS;
+    this.status = status;
+    this.objectName = RencanaStudiImpl.class.getName();
+  }
 
-	public RencanaStudiImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.totalSKS = 0;
-		this.status = "";
-	}
-
-	public void cekPembayaran() {
-		// TODO: implement this method
-	}
+  public RencanaStudiImpl() {
+    this.id = UUID.randomUUID();
+    this.totalSKS = 0;
+    this.status = "";
+    this.objectName = RencanaStudiImpl.class.getName();
+  }
 
 }

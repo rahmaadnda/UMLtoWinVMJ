@@ -1,102 +1,98 @@
 package siakreborn.capaian.cpmk;
+
+import vmj.routing.route.VMJExchange;
+import vmj.routing.route.Route;
+import vmj.auth.annotations.Restricted;
+
+import siakreborn.capaian.core.Capaian;
+import siakreborn.capaian.core.CapaianImpl;
+import siakreborn.capaian.core.CapaianResourceDecorator;
+import siakreborn.capaian.core.CapaianResourceComponent;
+import siakreborn.capaian.core.CapaianService;
+import siakreborn.capaian.core.CapaianServiceComponent;
+
 import java.util.*;
 
-import vmj.routing.route.Route;
-import vmj.routing.route.VMJExchange;
-
-import siakreborn.capaian.core.CapaianResourceDecorator;
-import siakreborn.capaian.core.CapaianImpl;
-import siakreborn.capaian.core.CapaianResourceComponent;
-
 public class CapaianResourceImpl extends CapaianResourceDecorator {
-    public CapaianResourceImpl (CapaianResourceComponent record) {
-        super(record);
+  private CapaianService capaianService;
+
+  public CapaianResourceImpl(CapaianResourceComponent recordController, CapaianServiceComponent recordService) {
+    super(recordController);
+    this.capaianService = new CapaianServiceImpl(recordService);
+  }
+
+  @Restricted(permissionName = "SaveCPMK")
+  @Route(url = "call/cpmk/save")
+  public List<HashMap<String, Object>> saveCapaian(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
     }
 
-    // @Restriced(permission = "")
-    @Route(url="call/cpmk/save")
-    public List<HashMap<String,Object>> save(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		  = create(vmjExchange);
-		Repository.saveObject();
-		return getAll(vmjExchange);
-	}
+    List<Capaian> capaianList = capaianService.saveCapaian((HashMap<String, Object>) vmjExchange.getPayload());
+    return capaianService.transformCapaianListToHashMap(capaianList);
+  }
 
-    public Capaian create(VMJExchange vmjExchange){
-		String bobotStr = (String) vmjExchange.getRequestBodyForm("bobot");
-		int bobot = Integer.parseInt(bobotStr);
-		
-		  = record.create(vmjExchange);
-		 deco = Factory.create("siakreborn.cpmk.core.CapaianImpl", , bobot, matakuliahimpl);
-			return deco;
-	}
+  @Restricted(permissionName = "UpdateCPMK")
+  @Route(url = "call/cpmk/update")
+  public HashMap<String, Object> updateCapaian(VMJExchange vmjExchange) {
+    Capaian capaian = capaianService.updateCapaian((HashMap<String, Object>) vmjExchange.getPayload());
+    return capaian.toHashMap();
+  }
 
-    public Capaian create(VMJExchange vmjExchange, int id){
-		String bobotStr = (String) vmjExchange.getRequestBodyForm("bobot");
-		int bobot = Integer.parseInt(bobotStr);
-		  = Repository.getObject(id);
-		int recordId = (((Decorator) saved.getRecord()).getId();
-		
-		  = record.create(vmjExchange);
-		 deco = Factory.create("siakreborn.cpmk.core.CapaianImpl", id, , bobot, matakuliahimpl);
-			return deco;
-	}
+  @Restricted(permissionName = "ReadCPMK")
+  @Route(url = "call/cpmk/detail")
+  public HashMap<String, Object> getCapaian(VMJExchange vmjExchange) {
+    String idStr = vmjExchange.getGETParam("id");
+    if(idStr == null) {
+      throw new IllegalArgumentException("Invalid UUID");
+    }
+    UUID id = UUID.fromString(idStr);
 
-    // @Restriced(permission = "")
-    @Route(url="call/cpmk/update")
-    public HashMap<String, Object> update(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("");
-		int id = Integer.parseInt(idStr);
-		
-		  = Repository.getObject(id);
-		 = create(vmjExchange, id);
-		
-		Repository.updateObject();
-		 = Repository.getObject(id);
-		//to do: fix association attributes
-		
-		return .toHashMap();
-		
-	}
+    Capaian capaian = capaianService.getCapaian(id);
+    return capaian.toHashMap();
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/cpmk/detail")
-    public HashMap<String, Object> get(VMJExchange vmjExchange){
-		return record.getCapaian(vmjExchange);
-	}
+  @Restricted(permissionName = "ReadCPMK")
+  @Route(url = "call/cpmk/list")
+  public List<HashMap<String, Object>> getAllCapaian(VMJExchange vmjExchange) {
+    List<Capaian> capaianList = capaianService.getAllCapaian();
+    return capaianService.transformCapaianListToHashMap(capaianList);
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/cpmk/list")
-    public List<HashMap<String,Object>> getAll(VMJExchange vmjExchange){
-		List<> List = Repository.getAllObject("_impl");
-		return transformListToHashMap(List);
-	}
+  @Restricted(permissionName = "ReadCPMK")
+  @Route(url = "call/cpmk/filter")
+  public List<HashMap<String, Object>> filterCapaian(VMJExchange vmjExchange) {
+    String by = (String) vmjExchange.getGETParam("by");
 
-    public List<HashMap<String,Object>> transformListToHashMap(List<> List){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < List.size(); i++) {
-            resultList.add(List.get(i).toHashMap());
-        }
+    if (by.equals("mataKuliah") || by.equals(("parentCPL"))) {
+      String idStr = (String) vmjExchange.getGETParam(by + "Id");
+      if(idStr == null) {
+        throw new IllegalArgumentException("Invalid UUID");
+      }
 
-        return resultList;
-	}
+      UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/cpmk/delete")
-    public List<HashMap<String,Object>> deleteCapaian(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		
-		String idStr = (String) vmjExchange.getRequestBodyForm("");
-		int id = Integer.parseInt(idStr);
-		Repository.deleteObject(id);
-		return getAll(vmjExchange);
-	}
+      String columnName = by.toLowerCase() + "_id";
+
+      List<Capaian> capaianList = ((CapaianServiceImpl) capaianService).filterCapaian(columnName, id);
+      return capaianService.transformCapaianListToHashMap(capaianList);
+    }
+
+    return new ArrayList<>();
+  }
+
+  @Restricted(permissionName = "DeleteCPMK")
+  @Route(url = "call/cpmk/delete")
+  public List<HashMap<String, Object>> deleteCapaian(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
+
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
+
+    List<Capaian> capaianList = capaianService.deleteCapaian(id);
+    return capaianService.transformCapaianListToHashMap(capaianList);
+  }
 
 }

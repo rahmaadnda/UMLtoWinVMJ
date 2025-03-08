@@ -14,38 +14,39 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.kurikulum.core.*;
 
-@Entity(name="matakuliah_impl")
-@Table(name="matakuliah_impl")
+@Entity(name = "mata_kuliah_impl")
+@Table(name = "mata_kuliah_impl")
 public class MataKuliahImpl extends MataKuliahComponent {
 
-	public MataKuliahImpl(UUID id, String kode, String nama, int sks, int term, KurikulumImpl kurikulumimpl) {
-		this.id = id;
-		this.kode = kode;
-		this.nama = nama;
-		this.sks = sks;
-		this.term = term;
-		this.kurikulumimpl = kurikulumimpl;
-	}
+  public MataKuliahImpl(String kode, String nama, int sks, int term, Kurikulum kurikulum) {
+    this.id = UUID.randomUUID();
+    this.kode = kode;
+    this.nama = nama;
+    this.sks = sks;
+    this.term = term;
+    this.kurikulum = kurikulum;
+    this.objectName = MataKuliahImpl.class.getName();
+  }
 
-	public MataKuliahImpl(, String kode, String nama, int sks, int term, KurikulumImpl kurikulumimpl) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = kode;
-		this.nama = nama;
-		this.sks = sks;
-		this.term = term;
-		this.kurikulumimpl = kurikulumimpl;
-	}
+  public MataKuliahImpl(UUID id, String kode, String nama, int sks, int term, Kurikulum kurikulum) {
+    this.id = id;
+    this.kode = kode;
+    this.nama = nama;
+    this.sks = sks;
+    this.term = term;
+    this.kurikulum = kurikulum;
+    this.objectName = MataKuliahImpl.class.getName();
+  }
 
-	public MataKuliahImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = "";
-		this.nama = "";
-		this.sks = 0;
-		this.term = 0;
-	}
-
+  public MataKuliahImpl() {
+    this.id = UUID.randomUUID();
+    this.kode = "";
+    this.nama = "";
+    this.sks = 0;
+    this.term = 0;
+    this.objectName = MataKuliahImpl.class.getName();
+  }
 
 }

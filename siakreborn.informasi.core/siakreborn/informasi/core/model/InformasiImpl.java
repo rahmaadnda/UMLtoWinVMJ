@@ -14,32 +14,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="informasi_impl")
-@Table(name="informasi_impl")
+@Entity(name = "informasi_impl")
+@Table(name = "informasi_impl")
 public class InformasiImpl extends InformasiComponent {
 
-	public InformasiImpl(String judul, UUID id, String deskripsi, Date tanggalPublikasi) {
-		this.judul = judul;
-		this.id = id;
-		this.deskripsi = deskripsi;
-		this.tanggalPublikasi = tanggalPublikasi;
-	}
+    public InformasiImpl(UUID id, String judul, String deskripsi, Date tanggalPublikasi) {
+        this.id = id;
+        this.judul = judul;
+        this.deskripsi = deskripsi;
+        this.tanggalPublikasi = tanggalPublikasi;
+        this.objectName = InformasiImpl.class.getName();
+    }
 
-	public InformasiImpl(String judul, , String deskripsi, Date tanggalPublikasi) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.judul = judul;
-		this.deskripsi = deskripsi;
-		this.tanggalPublikasi = tanggalPublikasi;
-	}
+    public InformasiImpl(String judul, String deskripsi, Date tanggalPublikasi) {
+        this.id = UUID.randomUUID();
+        this.judul = judul;
+        this.deskripsi = deskripsi;
+        this.tanggalPublikasi = tanggalPublikasi;
+        this.objectName = InformasiImpl.class.getName();
+    }
 
-	public InformasiImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.judul = "";
-		this.deskripsi = "";
-	}
-
-
+    public InformasiImpl() {
+        this.id = UUID.randomUUID();
+        this.judul = "";
+        this.deskripsi = "";
+        this.tanggalPublikasi = new Date();
+        this.objectName = InformasiImpl.class.getName();
+    }
 }

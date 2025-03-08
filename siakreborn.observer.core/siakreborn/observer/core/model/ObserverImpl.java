@@ -14,30 +14,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="observer_impl")
-@Table(name="observer_impl")
+@Entity(name = "observer_impl")
+@Table(name = "observer_impl")
 public class ObserverImpl extends ObserverComponent {
 
-	public ObserverImpl(String nama, UUID id, String email) {
-		this.nama = nama;
-		this.id = id;
-		this.email = email;
-	}
+  public ObserverImpl(UUID id, String nama, String email) {
+    this.id = id;
+    this.nama = nama;
+    this.email = email;
+    this.objectName = ObserverImpl.class.getName();
+  }
 
-	public ObserverImpl(String nama, , String email) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = nama;
-		this.email = email;
-	}
+  public ObserverImpl(String nama, String email) {
+    this.id = UUID.randomUUID();
+    this.nama = nama;
+    this.email = email;
+    this.objectName = ObserverImpl.class.getName();
+  }
 
-	public ObserverImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = "";
-		this.email = "";
-	}
-
+  public ObserverImpl() {
+    this.id = UUID.randomUUID();
+    this.nama = "";
+    this.email = "";
+    this.objectName = ObserverImpl.class.getName();
+  }
 
 }

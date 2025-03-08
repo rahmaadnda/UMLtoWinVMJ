@@ -1,27 +1,25 @@
 package siakreborn.mahasiswa.core;
+
 import java.util.*;
 
 import vmj.hibernate.integrator.RepositoryUtil;
 import vmj.routing.route.VMJExchange;
 //add other required packages
 
-public abstract class MahasiswaResourceComponent implements MahasiswaResource{
-	protected RepositoryUtil<Mahasiswa> mahasiswaRepository;
+public abstract class MahasiswaResourceComponent implements MahasiswaResource {
+  protected RepositoryUtil<Mahasiswa> mahasiswaRepository;
 
-    public MahasiswaResourceComponent(){
-        this.mahasiswaRepository = new RepositoryUtil<Mahasiswa>(siakreborn.mahasiswa.core.MahasiswaComponent.class);
-    }	
+  public MahasiswaResourceComponent() {
+    this.mahasiswaRepository = new RepositoryUtil<Mahasiswa>(siakreborn.mahasiswa.core.MahasiswaComponent.class);
+  }
 
-    public abstract List<HashMap<String,Object>> saveMahasiswa(VMJExchange vmjExchange);
-    public abstract Mahasiswa createMahasiswa(VMJExchange vmjExchange);
-	public abstract Mahasiswa createMahasiswa(VMJExchange vmjExchange, int id);    
-	public abstract HashMap<String, Object> updateMahasiswa(VMJExchange vmjExchange);
-    public abstract HashMap<String, Object> getMahasiswa(VMJExchange vmjExchange);
-    public abstract List<HashMap<String,Object>> getAllMahasiswa(VMJExchange vmjExchange);
-    public abstract List<HashMap<String,Object>> transformMahasiswaListToHashMap(List<Mahasiswa> MahasiswaList);
-    public abstract List<HashMap<String,Object>> deleteMahasiswa(VMJExchange vmjExchange);
+  public abstract List<HashMap<String, Object>> saveMahasiswa(VMJExchange vmjExchange);
 
-	public abstract HashMap<String, Object> verify(VMJExchange vmjExchange);
+  public abstract HashMap<String, Object> updateMahasiswa(VMJExchange vmjExchange);
 
-	public abstract HashMap<String, Object> graduate(VMJExchange vmjExchange);
+  public abstract HashMap<String, Object> getMahasiswa(VMJExchange vmjExchange);
+
+  public abstract List<HashMap<String, Object>> getAllMahasiswa(VMJExchange vmjExchange);
+
+  public abstract List<HashMap<String, Object>> deleteMahasiswa(VMJExchange vmjExchange);
 }

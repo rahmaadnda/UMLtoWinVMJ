@@ -14,28 +14,30 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.dosen.core.*;
+import siakreborn.kelas.core.*;
 
-@Entity(name="kelasdosen_impl")
-@Table(name="kelasdosen_impl")
+@Entity(name = "kelas_dosen_impl")
+@Table(name = "kelas_dosen_impl")
 public class KelasDosenImpl extends KelasDosenComponent {
 
-	public KelasDosenImpl(UUID id, DosenImpl dosenimpl, KelasImpl kelasimpl) {
-		this.id = id;
-		this.dosenimpl = dosenimpl;
-		this.kelasimpl = kelasimpl;
-	}
+  public KelasDosenImpl(Dosen dosen, Kelas kelas) {
+    this.id = UUID.randomUUID();
+    this.dosen = dosen;
+    this.kelas = kelas;
+    this.objectName = KelasDosenImpl.class.getName();
+  }
 
-	public KelasDosenImpl(, DosenImpl dosenimpl, KelasImpl kelasimpl) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.dosenimpl = dosenimpl;
-		this.kelasimpl = kelasimpl;
-	}
+  public KelasDosenImpl(UUID id, Dosen dosen, Kelas kelas) {
+    this.id = id;
+    this.dosen = dosen;
+    this.kelas = kelas;
+    this.objectName = KelasDosenImpl.class.getName();
+  }
 
-	public KelasDosenImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
-
+  public KelasDosenImpl() {
+    this.id = UUID.randomUUID();
+    this.objectName = KelasDosenImpl.class.getName();
+  }
 
 }

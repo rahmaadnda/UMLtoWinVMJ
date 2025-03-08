@@ -9,68 +9,73 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table(name="dosen_comp")
+@Entity(name = "dosen_comp")
+@Table(name = "dosen_comp", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class DosenComponent implements Dosen{
-	@Id
-	protected UUID id; 
-	protected String nama;
-	protected String nip;
-	protected String email;
+public abstract class DosenComponent implements Dosen {
+  @Id
+  protected UUID id;
+  protected String nama;
+  protected String nip;
+  protected String email;
 
-	public DosenComponent() {
+  protected String objectName = DosenComponent.class.getName();
 
-	} 
+  public DosenComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getNama() {
-		return this.nama;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setNama(String nama) {
-		this.nama = nama;
-	}
-	public String getNip() {
-		return this.nip;
-	}
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	public void setNip(String nip) {
-		this.nip = nip;
-	}
-	public String getEmail() {
-		return this.email;
-	}
+  public String getNama() {
+    return this.nama;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
- 
+  public void setNama(String nama) {
+    this.nama = nama;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " nama='" + getNama() + "'" +
-            " nip='" + getNip() + "'" +
-            " email='" + getEmail() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> dosenMap = new HashMap<String,Object>();
-		dosenMap.put("id",getId());
-		dosenMap.put("nama",getNama());
-		dosenMap.put("nip",getNip());
-		dosenMap.put("email",getEmail());
+  public String getNip() {
+    return this.nip;
+  }
 
-        return dosenMap;
-    }
+  public void setNip(String nip) {
+    this.nip = nip;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " nama='" + getNama() + "'" +
+        " nip='" + getNip() + "'" +
+        " email='" + getEmail() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> Map = new HashMap<String, Object>();
+    Map.put("id", getId());
+    Map.put("nama", getNama());
+    Map.put("nip", getNip());
+    Map.put("email", getEmail());
+
+    return Map;
+  }
 }

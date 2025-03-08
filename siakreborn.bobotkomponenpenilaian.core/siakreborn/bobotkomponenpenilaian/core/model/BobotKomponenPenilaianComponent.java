@@ -9,69 +9,93 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
-@Entity
-@Table(name="bobotkomponenpenilaian_comp")
+import siakreborn.komponenpenilaian.core.*;
+import siakreborn.capaian.core.*;
+import siakreborn.util.core.*;
+
+@Entity(name = "bobot_komponen_penilaian_comp")
+@Table(name = "bobot_komponen_penilaian_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class BobotKomponenPenilaianComponent implements BobotKomponenPenilaian{
-	@Id
-	protected UUID id; 
-	protected int bobot;
-	@ManyToOne(targetEntity=siakreborn.komponenpenilaian.core.KomponenPenilaianComponent.class)
-	public KomponenPenilaian komponenpenilaianimpl;
-	@ManyToOne(targetEntity=siakreborn..core.Component.class)
-	public  capaianimpl;
-	@ManyToOne(targetEntity=siakreborn..core.Component.class)
-	public  capaianimpl;
+public abstract class BobotKomponenPenilaianComponent implements BobotKomponenPenilaian {
+  @Id
+  protected UUID id;
+  protected double bobot;
+  @ManyToOne(targetEntity = siakreborn.komponenpenilaian.core.KomponenPenilaianComponent.class)
+  public KomponenPenilaian komponenPenilaian;
+  @ManyToOne(targetEntity = siakreborn.capaian.core.CapaianComponent.class)
+  public Capaian cpmk;
+  @ManyToOne(targetEntity = siakreborn.capaian.core.CapaianComponent.class)
+  public Capaian subCPMK;
 
-	public BobotKomponenPenilaianComponent() {
+  protected String objectName = BobotKomponenPenilaianComponent.class.getName();
 
-	} 
+  public BobotKomponenPenilaianComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public int getBobot() {
-		return this.bobot;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setBobot(int bobot) {
-		this.bobot = bobot;
-	}
-	public abstract KomponenPenilaianImpl getKomponenpenilaianimpl();
-	public abstract void setKomponenpenilaianimpl(KomponenPenilaianImpl komponenpenilaianimpl);
-	
-	public abstract CapaianImpl getCapaianimpl();
-	public abstract void setCapaianimpl(CapaianImpl capaianimpl);
-	
-	public abstract CapaianImpl getCapaianimpl();
-	public abstract void setCapaianimpl(CapaianImpl capaianimpl);
-	
- 
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " bobot='" + getBobot() + "'" +
-            " komponenpenilaianimpl='" + getKomponenpenilaianimpl() + "'" +
-            " capaianimpl='" + getCapaianimpl() + "'" +
-            " capaianimpl='" + getCapaianimpl() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> bobotkomponenpenilaianMap = new HashMap<String,Object>();
-		bobotkomponenpenilaianMap.put("id",getId());
-		bobotkomponenpenilaianMap.put("bobot",getBobot());
-		bobotkomponenpenilaianMap.put("komponenpenilaianimpl",getKomponenpenilaianimpl());
-		bobotkomponenpenilaianMap.put("capaianimpl",getCapaianimpl());
-		bobotkomponenpenilaianMap.put("capaianimpl",getCapaianimpl());
+  public double getBobot() {
+    return this.bobot;
+  }
 
-        return bobotkomponenpenilaianMap;
-    }
+  public void setBobot(double bobot) {
+    this.bobot = bobot;
+  }
+
+  public KomponenPenilaian getKomponenPenilaian() {
+    return this.komponenPenilaian;
+  }
+
+  public void setKomponenPenilaian(KomponenPenilaian komponenPenilaian) {
+    this.komponenPenilaian = komponenPenilaian;
+  }
+
+  public Capaian getCPMK() {
+    return this.cpmk;
+  }
+
+  public void setCPMK(Capaian cpmk) {
+    this.cpmk = cpmk;
+  }
+
+  public Capaian getSubCPMK() {
+    return this.cpmk;
+  }
+
+  public void setSubCPMK(Capaian subCPMK) {
+    this.subCPMK = subCPMK;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " bobot='" + getBobot() + "'" +
+        " komponenPenilaian='" + getKomponenPenilaian() + "'" +
+        " cpmk='" + getCPMK() + "'" +
+        " subcpmk='" + getSubCPMK() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> Map = new HashMap<String, Object>();
+    Map.put("id", getId());
+    Map.put("bobot", getBobot());
+    if (getKomponenPenilaian() != null)
+      Map = Util.combine(Map, getKomponenPenilaian().toHashMap(), "komponenPenilaian");
+    if (getCPMK() != null)
+      Map = Util.combine(Map, getCPMK().toHashMap(), "cpmk");
+    if (getSubCPMK() != null)
+      Map = Util.combine(Map, getSubCPMK().toHashMap(), "subCPMK");
+    return Map;
+  }
 }

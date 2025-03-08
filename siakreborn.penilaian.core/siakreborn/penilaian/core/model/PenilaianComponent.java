@@ -9,62 +9,80 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table(name="penilaian_comp")
+import siakreborn.komponenpenilaian.core.*;
+import siakreborn.mahasiswa.core.*;
+import siakreborn.util.core.*;
+
+@Entity(name = "penilaian_comp")
+@Table(name = "penilaian_comp", uniqueConstraints = @UniqueConstraint(columnNames = { "komponenpenilaian_id",
+    "mahasiswa_id" }))
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class PenilaianComponent implements Penilaian{
-	@Id
-	protected UUID id; 
-	protected int nilai;
-	@ManyToOne(targetEntity=siakreborn.mahasiswa.core.MahasiswaComponent.class)
-	public Mahasiswa mahasiswaimpl;
-	@ManyToOne(targetEntity=siakreborn.komponenpenilaian.core.KomponenPenilaianComponent.class)
-	public KomponenPenilaian komponenpenilaianimpl;
+public abstract class PenilaianComponent implements Penilaian {
+  @Id
+  protected UUID id;
+  protected int nilai;
+  @ManyToOne(targetEntity = siakreborn.komponenpenilaian.core.KomponenPenilaianComponent.class)
+  public KomponenPenilaian komponenPenilaian;
+  @ManyToOne(targetEntity = siakreborn.mahasiswa.core.MahasiswaComponent.class)
+  public Mahasiswa mahasiswa;
 
-	public PenilaianComponent() {
+  protected String objectName = PenilaianComponent.class.getName();
 
-	} 
+  public PenilaianComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public int getNilai() {
-		return this.nilai;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setNilai(int nilai) {
-		this.nilai = nilai;
-	}
-	public abstract MahasiswaImpl getMahasiswaimpl();
-	public abstract void setMahasiswaimpl(MahasiswaImpl mahasiswaimpl);
-	
-	public abstract KomponenPenilaianImpl getKomponenpenilaianimpl();
-	public abstract void setKomponenpenilaianimpl(KomponenPenilaianImpl komponenpenilaianimpl);
-	
- 
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " nilai='" + getNilai() + "'" +
-            " mahasiswaimpl='" + getMahasiswaimpl() + "'" +
-            " komponenpenilaianimpl='" + getKomponenpenilaianimpl() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> penilaianMap = new HashMap<String,Object>();
-		penilaianMap.put("id",getId());
-		penilaianMap.put("nilai",getNilai());
-		penilaianMap.put("mahasiswaimpl",getMahasiswaimpl());
-		penilaianMap.put("komponenpenilaianimpl",getKomponenpenilaianimpl());
+  public Mahasiswa getMahasiswa() {
+    return this.mahasiswa;
+  }
 
-        return penilaianMap;
-    }
+  public void setMahasiswa(Mahasiswa mahasiswa) {
+    this.mahasiswa = mahasiswa;
+  }
+
+  public int getNilai() {
+    return this.nilai;
+  }
+
+  public void setNilai(int nilai) {
+    this.nilai = nilai;
+  }
+
+  public KomponenPenilaian getKomponenPenilaian() {
+    return this.komponenPenilaian;
+  }
+
+  public void setKomponenPenilaian(KomponenPenilaian komponenPenilaian) {
+    this.komponenPenilaian = komponenPenilaian;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " mahasiswa='" + getMahasiswa() + "'" +
+        " nilai='" + getNilai() + "'" +
+        " komponenPenilaian='" + getKomponenPenilaian() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> Map = new HashMap<String, Object>();
+    Map.put("id", getId());
+    Map.put("nilai", getNilai());
+    Map = Util.combine(Map, getMahasiswa().toHashMap(), "mahasiswa");
+    Map = Util.combine(Map, getKomponenPenilaian().toHashMap(), "komponenPenilaian");
+    return Map;
+  }
 }

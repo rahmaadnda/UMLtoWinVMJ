@@ -14,33 +14,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="subscriptionplan_impl")
-@Table(name="subscriptionplan_impl")
+@Entity(name = "subscriptionplan_impl")
+@Table(name = "subscriptionplan_impl")
 public class SubscriptionPlanImpl extends SubscriptionPlanComponent {
 
-	public SubscriptionPlanImpl(UUID id, String deskripsi, String name, int harga) {
-		this.id = id;
-		this.deskripsi = deskripsi;
-		this.name = name;
-		this.harga = harga;
-	}
+  public SubscriptionPlanImpl(UUID id, String name, String deskripsi, int harga) {
+    this.id = id;
+    this.name = name;
+    this.deskripsi = deskripsi;
+    this.harga = harga;
+    this.objectName = SubscriptionPlanImpl.class.getName();
+  }
 
-	public SubscriptionPlanImpl(, String deskripsi, String name, int harga) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.deskripsi = deskripsi;
-		this.name = name;
-		this.harga = harga;
-	}
+  public SubscriptionPlanImpl(String name, String deskripsi, int harga) {
+    this.id = UUID.randomUUID();
+    this.name = name;
+    this.deskripsi = deskripsi;
+    this.harga = harga;
+    this.objectName = SubscriptionPlanImpl.class.getName();
+  }
 
-	public SubscriptionPlanImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.deskripsi = "";
-		this.name = "";
-		this.harga = 0;
-	}
-
+  public SubscriptionPlanImpl() {
+    this.id = UUID.randomUUID();
+    this.name = "";
+    this.deskripsi = "";
+    this.harga = 0;
+    this.objectName = SubscriptionPlanImpl.class.getName();
+  }
 
 }

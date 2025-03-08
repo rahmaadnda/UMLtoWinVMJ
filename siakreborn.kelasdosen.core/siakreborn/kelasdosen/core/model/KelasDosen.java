@@ -3,12 +3,15 @@ import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import java.util.*;
 
+import siakreborn.dosen.core.Dosen;
+import siakreborn.kelas.core.Kelas;
+
 public interface KelasDosen {
-	public UUID getId();
-	public void setId(UUID id);
-	public DosenImpl getDosenimpl();
-	public void setDosenimpl(DosenImpl dosenimpl);
-	public KelasImpl getKelasimpl();
-	public void setKelasimpl(KelasImpl kelasimpl);
+	UUID getId();
+	void setId(UUID id);
+	Dosen getDosen();
+	void setDosen(Dosen dosen);
+	Kelas getKelas();
+	void setKelas(Kelas kelas);
 	HashMap<String, Object> toHashMap();
 }

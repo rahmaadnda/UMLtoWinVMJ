@@ -14,30 +14,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.kelas.core.*;
 
-@Entity(name="kelasmahasiswa_impl")
-@Table(name="kelasmahasiswa_impl")
+@Entity(name = "kelas_mahasiswa_impl")
+@Table(name = "kelas_mahasiswa_impl")
 public class KelasMahasiswaImpl extends KelasMahasiswaComponent {
 
-	public KelasMahasiswaImpl(UUID id, KelasImpl kelasimpl, RencanaStudiImpl rencanastudi, DateTime tanggalPengisian) {
-		this.id = id;
-		this.kelasimpl = kelasimpl;
-		this.rencanastudi = rencanastudi;
-		this.tanggalPengisian = tanggalPengisian;
-	}
+  public KelasMahasiswaImpl(RencanaStudi rencanaStudi, Kelas kelas, Date tanggalPengisian) {
+    this.id = UUID.randomUUID();
+    this.rencanaStudi = rencanaStudi;
+    this.kelas = kelas;
+    this.tanggalPengisian = tanggalPengisian;
+    this.objectName = KelasMahasiswaImpl.class.getName();
+  }
 
-	public KelasMahasiswaImpl(, KelasImpl kelasimpl, RencanaStudiImpl rencanastudi, DateTime tanggalPengisian) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kelasimpl = kelasimpl;
-		this.rencanastudi = rencanastudi;
-		this.tanggalPengisian = tanggalPengisian;
-	}
+  public KelasMahasiswaImpl(UUID id, RencanaStudi rencanaStudi, Kelas kelas, Date tanggalPengisian) {
+    this.id = id;
+    this.rencanaStudi = rencanaStudi;
+    this.kelas = kelas;
+    this.tanggalPengisian = tanggalPengisian;
+    this.objectName = KelasMahasiswaImpl.class.getName();
+  }
 
-	public KelasMahasiswaImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
-
+  public KelasMahasiswaImpl() {
+    this.id = UUID.randomUUID();
+    this.objectName = KelasMahasiswaImpl.class.getName();
+  }
 
 }

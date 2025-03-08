@@ -14,37 +14,39 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.programstudi.core.*;
 
 @Entity(name="kurikulum_impl")
 @Table(name="kurikulum_impl")
 public class KurikulumImpl extends KurikulumComponent {
 
-	public KurikulumImpl(UUID id, String kode, String noSK, String status, String profilLulusan, ProgramStudiImpl programstudiimpl) {
+	public KurikulumImpl(String kode, String noSK, String status, String profilLulusan, ProgramStudi programStudi) {
+		this.id = UUID.randomUUID();
+		this.kode = kode;
+		this.noSK = noSK;
+		this.status = status;
+		this.profilLulusan = profilLulusan;
+		this.programStudi = programStudi;
+		this.objectName = KurikulumImpl.class.getName();
+	}
+
+	public KurikulumImpl(UUID id, String kode, String noSK, String status, String profilLulusan, ProgramStudi programStudi) {
 		this.id = id;
 		this.kode = kode;
 		this.noSK = noSK;
 		this.status = status;
 		this.profilLulusan = profilLulusan;
-		this.programstudiimpl = programstudiimpl;
-	}
-
-	public KurikulumImpl(, String kode, String noSK, String status, String profilLulusan, ProgramStudiImpl programstudiimpl) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.kode = kode;
-		this.noSK = noSK;
-		this.status = status;
-		this.profilLulusan = profilLulusan;
-		this.programstudiimpl = programstudiimpl;
+		this.programStudi = programStudi;
+		this.objectName = KurikulumImpl.class.getName();
 	}
 
 	public KurikulumImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
+		this.id = UUID.randomUUID();
 		this.kode = "";
 		this.noSK = "";
 		this.status = "";
 		this.profilLulusan = "";
+		this.objectName = KurikulumImpl.class.getName();
 	}
 
 

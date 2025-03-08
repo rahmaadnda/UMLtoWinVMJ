@@ -1,25 +1,70 @@
 package siakreborn.informasi.akademik;
 
-import java.util.*;
-import vmj.routing.route.Route;
-import vmj.routing.route.VMJExchange;
+import siakreborn.informasi.core.*;
+import siakreborn.adminakademik.core.*;
+
+import siakreborn.util.core.Util;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.persistence.Column;
+import javax.persistence.OneToOne;
 
-import siakreborn.informasi.core.InformasiDecorator;
-import siakreborn.informasi.core.Informasi;
-import siakreborn.informasi.core.InformasiComponent;
+import java.util.*;
 
-@Entity(name="informasi_akademik")
-@Table(name="informasi_akademik")
+@Entity(name = "informasi_akademik")
+@Table(name = "informasi_akademik")
 public class InformasiImpl extends InformasiDecorator {
 
-	public InformasiImpl(InformasiComponent record, AdminAkademikImpl adminakademikimpl) {
-		super(record);
-	}
+    @OneToOne(targetEntity = siakreborn.adminakademik.core.AdminAkademikComponent.class)
+    public AdminAkademik adminAkademik;
 
+    public InformasiImpl() {
+        super();
+        this.objectName = InformasiImpl.class.getName();
+    }
 
+    public InformasiImpl(AdminAkademik adminAkademik) {
+        super();
+        this.adminAkademik = adminAkademik;
+        this.objectName = InformasiImpl.class.getName();
+    }
 
+    public InformasiImpl(InformasiComponent record, AdminAkademik adminAkademik) {
+        super(record);
+        this.adminAkademik = adminAkademik;
+        this.objectName = InformasiImpl.class.getName();
+    }
+
+    public InformasiImpl(UUID id, InformasiComponent record, AdminAkademik adminAkademik) {
+        super(id, record);
+        this.adminAkademik = adminAkademik;
+        this.objectName = InformasiImpl.class.getName();
+    }
+
+    public AdminAkademik getAdminAkademik() {
+        return adminAkademik;
+    }
+
+    public void setAdminAkademik(AdminAkademik adminAkademik) {
+        this.adminAkademik = adminAkademik;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", record='" + getRecord() + "'" +
+            ", adminAkademik='" + getAdminAkademik() + "'" +
+            "}";
+    }
+
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> informasiMap = record.toHashMap();
+        informasiMap.put("id", this.getId());
+        informasiMap = Util.combine(informasiMap, ((AdminAkademikComponent) this.getAdminAkademik()).toHashMap(), "adminAkademik");
+        return informasiMap;
+    }
 }

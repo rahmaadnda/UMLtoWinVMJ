@@ -10,50 +10,51 @@ import javax.persistence.CascadeType;
 //add other required packages
 
 @MappedSuperclass
-public abstract class RencanaStudiDecorator extends RencanaStudiComponent{
-    @OneToOne(cascade=CascadeType.ALL)
-	protected RencanaStudiComponent record;
-		
-	public RencanaStudiDecorator (RencanaStudiComponent record) {
-		this.record = record;
-	}
+public abstract class RencanaStudiDecorator extends RencanaStudiComponent {
+  @OneToOne(cascade = CascadeType.ALL)
+  protected RencanaStudiComponent record;
 
-	public RencanaStudiDecorator (int id, RencanaStudiComponent record) {
-		this.id =  id;
-		this.record = record;
-	}
-	
-	public RencanaStudiDecorator(){
-		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
+  public RencanaStudiDecorator(RencanaStudiComponent record) {
+    this.record = record;
+    this.id = UUID.randomUUID();
+  }
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
-	public int getTotalSKS() {
-		return record.getTotalSKS();
-	}
-	public void setTotalSKS(int totalSKS) {
-		record.setTotalSKS(totalSKS);
-	}
-	public String getStatus() {
-		return record.getStatus();
-	}
-	public void setStatus(String status) {
-		record.setStatus(status);
-	}
+  public RencanaStudiDecorator(UUID id, RencanaStudiComponent record) {
+    this.id = id;
+    this.record = record;
+  }
 
-	public void cekPembayaran() {
-		return record.cekPembayaran();
-	}
+  public RencanaStudiDecorator() {
+    super();
+    this.id = UUID.randomUUID();
+  }
 
-	public HashMap<String, Object> toHashMap() {
-        return this.record.toHashMap();
-    }
+  public UUID getId() {
+    return record.getId();
+  }
+
+  public void setId(UUID id) {
+    record.setId(id);
+  }
+
+  public int getTotalSKS() {
+    return record.getTotalSKS();
+  }
+
+  public void setTotalSKS(int totalSKS) {
+    record.setTotalSKS(totalSKS);
+  }
+
+  public String getStatus() {
+    return record.getStatus();
+  }
+
+  public void setStatus(String status) {
+    record.setStatus(status);
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    return this.record.toHashMap();
+  }
 
 }

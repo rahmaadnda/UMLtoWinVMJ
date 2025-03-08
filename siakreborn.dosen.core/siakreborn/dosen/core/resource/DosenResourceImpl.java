@@ -1,105 +1,71 @@
 package siakreborn.dosen.core;
+
 import java.util.*;
 
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import siakreborn.dosen.DosenFactory;
-import prices.auth.vmj.annotations.Restricted;
+import vmj.auth.annotations.Restricted;
 //add other required packages
 
-public class DosenResourceImpl extends DosenResourceComponent{
+public class DosenResourceImpl extends DosenResourceComponent {
+  private DosenFactory dosenFactory = new DosenFactory();
+  private DosenService dosenService = new DosenServiceImpl();
 
-	// @Restriced(permission = "")
-    @Route(url="call/dosen/save")
-    public List<HashMap<String,Object>> saveDosen(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		Dosen dosen = createDosen(vmjExchange);
-		dosenRepository.saveObject(dosen);
-		return getAllDosen(vmjExchange);
-	}
+  @Restricted(permissionName = "CreateDosen")
+  @Route(url = "call/dosen/save")
+  public List<HashMap<String, Object>> saveDosen(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    public Dosen createDosen(VMJExchange vmjExchange){
-		String nama = (String) vmjExchange.getRequestBodyForm("nama");
-		String nip = (String) vmjExchange.getRequestBodyForm("nip");
-		String email = (String) vmjExchange.getRequestBodyForm("email");
-		
-		//to do: fix association attributes
-		
-		Dosen dosen = DosenFactory.createDosen("siakreborn.dosen.core.DosenImpl", id, nama, nip, email);
-			return dosen;
-	}
+    List<Dosen> dosenList = dosenService.saveDosen((HashMap<String, Object>) vmjExchange.getPayload());
+    return dosenService.transformDosenListToHashMap(dosenList);
+  }
 
-    public Dosen createDosen(VMJExchange vmjExchange, int id){
-		String nama = (String) vmjExchange.getRequestBodyForm("nama");
-		String nip = (String) vmjExchange.getRequestBodyForm("nip");
-		String email = (String) vmjExchange.getRequestBodyForm("email");
-		
-		//to do: fix association attributes
-		
-		Dosen dosen = DosenFactory.createDosen("siakreborn.dosen.core.DosenImpl", , nama, nip, email);
-			return dosen;
-	}
+  @Restricted(permissionName = "UpdateDosen")
+  @Route(url = "call/dosen/update")
+  public HashMap<String, Object> updateDosen(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    // @Restriced(permission = "")
-    @Route(url="call/dosen/update")
-    public HashMap<String, Object> updateDosen(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		
-		Dosen dosen = dosenRepository.getObject(id);
-		dosen.setNama((String) vmjExchange.getRequestBodyForm("nama"));
-		dosen.setNip((String) vmjExchange.getRequestBodyForm("nip"));
-		dosen.setEmail((String) vmjExchange.getRequestBodyForm("email"));
-		
-		dosenRepository.updateObject(dosen);
-		dosen = dosenRepository.getObject(id);
-		//to do: fix association attributes
-		
-		return dosen.toHashMap();
-		
-	}
+    Dosen dosen = dosenService.updateDosen((HashMap<String, Object>) vmjExchange.getPayload());
+    return dosen.toHashMap();
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/dosen/detail")
-    public HashMap<String, Object> getDosen(VMJExchange vmjExchange){
-		String idStr = vmjExchange.getGETParam("id"); 
-		int id = Integer.parseInt(idStr);
-		Dosen dosen = dosenRepository.getObject(id);
-		return dosen.toHashMap();
-	}
+  @Restricted(permissionName = "ReadDosen")
+  @Route(url = "call/dosen/detail")
+  public HashMap<String, Object> getDosen(VMJExchange vmjExchange) {
+    String idStr = vmjExchange.getGETParam("id");
+    if(idStr == null) {
+      throw new IllegalArgumentException("Invalid UUID");
+    }
+    UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/dosen/list")
-    public List<HashMap<String,Object>> getAllDosen(VMJExchange vmjExchange){
-		List<Dosen> dosenList = dosenRepository.getAllObject("dosen_impl");
-		return transformDosenListToHashMap(dosenList);
-	}
+    Dosen dosen = dosenService.getDosen(id);
+    return dosen.toHashMap();
+  }
 
-    public List<HashMap<String,Object>> transformDosenListToHashMap(List<Dosen> dosenList){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < dosenList.size(); i++) {
-            resultList.add(dosenList.get(i).toHashMap());
-        }
+  @Restricted(permissionName = "ReadDosen")
+  @Route(url = "call/dosen/list")
+  public List<HashMap<String, Object>> getAllDosen(VMJExchange vmjExchange) {
+    List<Dosen> dosenList = dosenService.getAllDosen();
+    return dosenService.transformDosenListToHashMap(dosenList);
+  }
 
-        return resultList;
-	}
+  @Restricted(permissionName = "DeleteDosen")
+  @Route(url = "call/dosen/delete")
+  public List<HashMap<String, Object>> deleteDosen(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-	// @Restriced(permission = "")
-    @Route(url="call/dosen/delete")
-    public List<HashMap<String,Object>> deleteDosen(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		dosenRepository.deleteObject(id);
-		return getAllDosen(vmjExchange);
-	}
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
+
+    List<Dosen> dosenList = dosenService.deleteDosen(id);
+    return dosenService.transformDosenListToHashMap(dosenList);
+  }
 
 }

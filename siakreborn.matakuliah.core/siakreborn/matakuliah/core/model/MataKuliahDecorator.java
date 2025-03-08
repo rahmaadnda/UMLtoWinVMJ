@@ -7,34 +7,39 @@ import vmj.routing.route.VMJExchange;
 import javax.persistence.OneToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.CascadeType;
-//add other required packages
+
+import siakreborn.kurikulum.core.Kurikulum;
 
 @MappedSuperclass
 public abstract class MataKuliahDecorator extends MataKuliahComponent{
-    @OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL)
 	protected MataKuliahComponent record;
 		
-	public MataKuliahDecorator (MataKuliahComponent record) {
+	public MataKuliahDecorator (MataKuliahComponent record, String objectName) {
 		this.record = record;
+		this.id = UUID.randomUUID();
+		this.record.objectName = objectName;
 	}
 
-	public MataKuliahDecorator (int id, MataKuliahComponent record) {
+	public MataKuliahDecorator (UUID id, MataKuliahComponent record) {
 		this.id =  id;
 		this.record = record;
 	}
 	
 	public MataKuliahDecorator(){
 		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
+		this.record = new MataKuliahImpl();
+		this.id = UUID.randomUUID();
 	}
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
+	public MataKuliahComponent getRecord() {
+        return this.record;
+    }
+
+    public void setRecord(MataKuliahComponent record) {
+        this.record = record;
+    }
+
 	public String getKode() {
 		return record.getKode();
 	}
@@ -59,6 +64,12 @@ public abstract class MataKuliahDecorator extends MataKuliahComponent{
 	public void setTerm(int term) {
 		record.setTerm(term);
 	}
+	public Kurikulum getKurikulum() {
+        return this.record.getKurikulum();
+    }
+    public void setKurikulum(Kurikulum kurikulum) {
+        this.record.setKurikulum(kurikulum);
+    }
 
 
 	public HashMap<String, Object> toHashMap() {

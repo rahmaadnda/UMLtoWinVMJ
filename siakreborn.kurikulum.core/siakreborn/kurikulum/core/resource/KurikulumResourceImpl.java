@@ -1,108 +1,91 @@
 package siakreborn.kurikulum.core;
+
 import java.util.*;
 
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import siakreborn.kurikulum.KurikulumFactory;
-import prices.auth.vmj.annotations.Restricted;
-//add other required packages
+import vmj.auth.annotations.Restricted;
+import siakreborn.programstudi.core.ProgramStudi;
 
-public class KurikulumResourceImpl extends KurikulumResourceComponent{
+public class KurikulumResourceImpl extends KurikulumResourceComponent {
+  private KurikulumFactory kurikulumFactory = new KurikulumFactory();
+  private KurikulumService kurikulumService = new KurikulumServiceImpl();
 
-	// @Restriced(permission = "")
-    @Route(url="call/kurikulum/save")
-    public List<HashMap<String,Object>> saveKurikulum(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		Kurikulum kurikulum = createKurikulum(vmjExchange);
-		kurikulumRepository.saveObject(kurikulum);
-		return getAllKurikulum(vmjExchange);
-	}
+  @Restricted(permissionName = "CreateKurikulum")
+  @Route(url = "call/kurikulum/save")
+  public List<HashMap<String, Object>> saveKurikulum(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    public Kurikulum createKurikulum(VMJExchange vmjExchange){
-		String kode = (String) vmjExchange.getRequestBodyForm("kode");
-		String noSK = (String) vmjExchange.getRequestBodyForm("noSK");
-		String status = (String) vmjExchange.getRequestBodyForm("status");
-		String profilLulusan = (String) vmjExchange.getRequestBodyForm("profilLulusan");
-		
-		//to do: fix association attributes
-		
-		Kurikulum kurikulum = KurikulumFactory.createKurikulum("siakreborn.kurikulum.core.KurikulumImpl", id, kode, noSK, status, profilLulusan, programstudiimpl);
-			return kurikulum;
-	}
+    List<Kurikulum> kurikulumList = kurikulumService.saveKurikulum((HashMap<String, Object>) vmjExchange.getPayload());
+    return kurikulumService.transformKurikulumListToHashMap(kurikulumList);
+  }
 
-    public Kurikulum createKurikulum(VMJExchange vmjExchange, int id){
-		String kode = (String) vmjExchange.getRequestBodyForm("kode");
-		String noSK = (String) vmjExchange.getRequestBodyForm("noSK");
-		String status = (String) vmjExchange.getRequestBodyForm("status");
-		String profilLulusan = (String) vmjExchange.getRequestBodyForm("profilLulusan");
-		
-		//to do: fix association attributes
-		
-		Kurikulum kurikulum = KurikulumFactory.createKurikulum("siakreborn.kurikulum.core.KurikulumImpl", , kode, noSK, status, profilLulusan, programstudiimpl);
-			return kurikulum;
-	}
+  @Restricted(permissionName = "UpdateKurikulum")
+  @Route(url = "call/kurikulum/update")
+  public HashMap<String, Object> updateKurikulum(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    // @Restriced(permission = "")
-    @Route(url="call/kurikulum/update")
-    public HashMap<String, Object> updateKurikulum(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		
-		Kurikulum kurikulum = kurikulumRepository.getObject(id);
-		kurikulum.setKode((String) vmjExchange.getRequestBodyForm("kode"));
-		kurikulum.setNoSK((String) vmjExchange.getRequestBodyForm("noSK"));
-		kurikulum.setStatus((String) vmjExchange.getRequestBodyForm("status"));
-		kurikulum.setProfilLulusan((String) vmjExchange.getRequestBodyForm("profilLulusan"));
-		
-		kurikulumRepository.updateObject(kurikulum);
-		kurikulum = kurikulumRepository.getObject(id);
-		//to do: fix association attributes
-		
-		return kurikulum.toHashMap();
-		
-	}
+    Kurikulum kurikulum = kurikulumService.updateKurikulum((HashMap<String, Object>) vmjExchange.getPayload());
+    return kurikulum.toHashMap();
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/kurikulum/detail")
-    public HashMap<String, Object> getKurikulum(VMJExchange vmjExchange){
-		String idStr = vmjExchange.getGETParam("id"); 
-		int id = Integer.parseInt(idStr);
-		Kurikulum kurikulum = kurikulumRepository.getObject(id);
-		return kurikulum.toHashMap();
-	}
+  @Restricted(permissionName = "ReadKurikulum")
+  @Route(url = "call/kurikulum/detail")
+  public HashMap<String, Object> getKurikulum(VMJExchange vmjExchange) {
+    String idStr = vmjExchange.getGETParam("id");
+    if(idStr == null) {
+      throw new IllegalArgumentException("Invalid UUID");
+    }
+    UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/kurikulum/list")
-    public List<HashMap<String,Object>> getAllKurikulum(VMJExchange vmjExchange){
-		List<Kurikulum> kurikulumList = kurikulumRepository.getAllObject("kurikulum_impl");
-		return transformKurikulumListToHashMap(kurikulumList);
-	}
+    Kurikulum kurikulum = kurikulumService.getKurikulum(id);
+    return kurikulum.toHashMap();
+  }
 
-    public List<HashMap<String,Object>> transformKurikulumListToHashMap(List<Kurikulum> kurikulumList){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < kurikulumList.size(); i++) {
-            resultList.add(kurikulumList.get(i).toHashMap());
-        }
+  @Restricted(permissionName = "ReadKurikulum")
+  @Route(url = "call/kurikulum/list")
+  public List<HashMap<String, Object>> getAllKurikulum(VMJExchange vmjExchange) {
+    List<Kurikulum> kurikulumList = kurikulumService.getAllKurikulum();
+    return kurikulumService.transformKurikulumListToHashMap(kurikulumList);
+  }
 
-        return resultList;
-	}
+  @Restricted(permissionName = "ReadKurikulum")
+  @Route(url = "call/kurikulum/filter")
+  public List<HashMap<String, Object>> filterKurikulum(VMJExchange vmjExchange) {
+    String by = (String) vmjExchange.getGETParam("by");
 
-	// @Restriced(permission = "")
-    @Route(url="call/kurikulum/delete")
-    public List<HashMap<String,Object>> deleteKurikulum(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		kurikulumRepository.deleteObject(id);
-		return getAllKurikulum(vmjExchange);
-	}
+    if (by.equals("programStudi")) {
+      String programStudiIdStr = (String) vmjExchange.getGETParam("programStudiId");
+      if(idStr == null) {
+        throw new IllegalArgumentException("Invalid UUID");
+      }
+
+      UUID programStudiId = UUID.fromString(programStudiIdStr);
+
+      List<Kurikulum> kurikulumList = kurikulumService.filterKurikulumByProgramStudi(programStudiId);
+      return kurikulumService.transformKurikulumListToHashMap(kurikulumList);
+    }
+
+    return new ArrayList<>();
+  }
+
+  @Restricted(permissionName = "DeleteKurikulum")
+  @Route(url = "call/kurikulum/delete")
+  public List<HashMap<String, Object>> deleteKurikulum(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
+
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
+
+    List<Kurikulum> kurikulumList = kurikulumService.deleteKurikulum(id);
+    return kurikulumService.transformKurikulumListToHashMap(kurikulumList);
+  }
 
 }

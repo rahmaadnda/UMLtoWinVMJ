@@ -1,16 +1,28 @@
 package siakreborn.penilaian.core;
+
+import siakreborn.komponenpenilaian.core.KomponenPenilaian;
+import siakreborn.mahasiswa.core.Mahasiswa;
+
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import java.util.*;
 
 public interface Penilaian {
-	public UUID getId();
-	public void setId(UUID id);
-	public int getNilai();
-	public void setNilai(int nilai);
-	public MahasiswaImpl getMahasiswaimpl();
-	public void setMahasiswaimpl(MahasiswaImpl mahasiswaimpl);
-	public KomponenPenilaianImpl getKomponenpenilaianimpl();
-	public void setKomponenpenilaianimpl(KomponenPenilaianImpl komponenpenilaianimpl);
-	HashMap<String, Object> toHashMap();
+  UUID getId();
+
+  void setId(UUID id);
+
+  Mahasiswa getMahasiswa();
+
+  void setMahasiswa(Mahasiswa mahasiswa);
+
+  int getNilai();
+
+  void setNilai(int nilai);
+
+  KomponenPenilaian getKomponenPenilaian();
+
+  void setKomponenPenilaian(KomponenPenilaian KomponenPenilaian);
+
+  HashMap<String, Object> toHashMap();
 }

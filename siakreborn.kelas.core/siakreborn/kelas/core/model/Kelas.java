@@ -3,20 +3,23 @@ import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import java.util.*;
 
+import siakreborn.matakuliah.core.MataKuliah;
+import siakreborn.semester.core.Semester;
+
 public interface Kelas {
-	public UUID getId();
-	public void setId(UUID id);
-	public String getNama();
-	public void setNama(String nama);
-	public int getKapasitas();
-	public void setKapasitas(int kapasitas);
-	public String getRuangan();
-	public void setRuangan(String ruangan);
-	public String getJadwal();
-	public void setJadwal(String jadwal);
-	public MataKuliahImpl getMatakuliahimpl();
-	public void setMatakuliahimpl(MataKuliahImpl matakuliahimpl);
-	public SemesterImpl getSemesterimpl();
-	public void setSemesterimpl(SemesterImpl semesterimpl);
+	UUID getId();
+	void setId(UUID id);
+	String getNama();
+	void setNama(String nama);
+	int getKapasitas();
+	void setKapasitas(int kapasitas);
+	String getRuangan();
+	void setRuangan(String ruangan);
+	String getJadwal();
+	void setJadwal(String jadwal);
+	MataKuliah getMataKuliah();
+	void setMataKuliah(MataKuliah mataKuliah);
+	Semester getSemester();
+	void setSemester(Semester semester);
 	HashMap<String, Object> toHashMap();
 }

@@ -1,111 +1,73 @@
 package siakreborn.semester.core;
+
 import java.util.*;
 
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import siakreborn.semester.SemesterFactory;
-import prices.auth.vmj.annotations.Restricted;
-//add other required packages
+import vmj.auth.annotations.Restricted;
 
-public class SemesterResourceImpl extends SemesterResourceComponent{
+public class SemesterResourceImpl extends SemesterResourceComponent {
+  private SemesterFactory semesterFactory = new SemesterFactory();
+  private SemesterService semesterService = new SemesterServiceImpl();
 
-	// @Restriced(permission = "")
-    @Route(url="call/semester/save")
-    public List<HashMap<String,Object>> saveSemester(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		Semester semester = createSemester(vmjExchange);
-		semesterRepository.saveObject(semester);
-		return getAllSemester(vmjExchange);
-	}
+  @Restricted(permissionName = "CreateSemester")
+  @Route(url = "call/semester/save")
+  public List<HashMap<String, Object>> saveSemester(VMJExchange vmjExchange) {
+    List<Semester> semesterList = semesterService.saveSemester((HashMap<String, Object>) vmjExchange.getPayload());
+    return semesterService.transformSemesterListToHashMap(semesterList);
+  }
 
-    public Semester createSemester(VMJExchange vmjExchange){
-		String kode = (String) vmjExchange.getRequestBodyForm("kode");
-		String status = (String) vmjExchange.getRequestBodyForm("status");
-		String tanggalMulai = (String) vmjExchange.getRequestBodyForm("tanggalMulai");
-		String tanggalSelesai = (String) vmjExchange.getRequestBodyForm("tanggalSelesai");
-		String deskripsi = (String) vmjExchange.getRequestBodyForm("deskripsi");
-		
-		//to do: fix association attributes
-		
-		Semester semester = SemesterFactory.createSemester("siakreborn.semester.core.SemesterImpl", id, kode, status, tanggalMulai, tanggalSelesai, deskripsi);
-			return semester;
-	}
+  @Restricted(permissionName = "UpdateSemester")
+  @Route(url = "call/semester/update")
+  public HashMap<String, Object> updateSemester(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-    public Semester createSemester(VMJExchange vmjExchange, int id){
-		String kode = (String) vmjExchange.getRequestBodyForm("kode");
-		String status = (String) vmjExchange.getRequestBodyForm("status");
-		String tanggalMulai = (String) vmjExchange.getRequestBodyForm("tanggalMulai");
-		String tanggalSelesai = (String) vmjExchange.getRequestBodyForm("tanggalSelesai");
-		String deskripsi = (String) vmjExchange.getRequestBodyForm("deskripsi");
-		
-		//to do: fix association attributes
-		
-		Semester semester = SemesterFactory.createSemester("siakreborn.semester.core.SemesterImpl", , kode, status, tanggalMulai, tanggalSelesai, deskripsi);
-			return semester;
-	}
+    Semester semester = semesterService.updateSemester((HashMap<String, Object>) vmjExchange.getPayload());
+    return semester.toHashMap();
+  }
 
-    // @Restriced(permission = "")
-    @Route(url="call/semester/update")
-    public HashMap<String, Object> updateSemester(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		
-		Semester semester = semesterRepository.getObject(id);
-		semester.setKode((String) vmjExchange.getRequestBodyForm("kode"));
-		semester.setStatus((String) vmjExchange.getRequestBodyForm("status"));
-		semester.setTanggalMulai((String) vmjExchange.getRequestBodyForm("tanggalMulai"));
-		semester.setTanggalSelesai((String) vmjExchange.getRequestBodyForm("tanggalSelesai"));
-		semester.setDeskripsi((String) vmjExchange.getRequestBodyForm("deskripsi"));
-		
-		semesterRepository.updateObject(semester);
-		semester = semesterRepository.getObject(id);
-		//to do: fix association attributes
-		
-		return semester.toHashMap();
-		
-	}
+  @Restricted(permissionName = "ReadSemester")
+  @Route(url = "call/semester/detail")
+  public HashMap<String, Object> getSemester(VMJExchange vmjExchange) {
+    String idStr = vmjExchange.getGETParam("id");
+    if(idStr == null) {
+      throw new IllegalArgumentException("Invalid UUID");
+    }
+    UUID id = UUID.fromString(idStr);
 
-	// @Restriced(permission = "")
-    @Route(url="call/semester/detail")
-    public HashMap<String, Object> getSemester(VMJExchange vmjExchange){
-		String idStr = vmjExchange.getGETParam("id"); 
-		int id = Integer.parseInt(idStr);
-		Semester semester = semesterRepository.getObject(id);
-		return semester.toHashMap();
-	}
+    Semester semester = semesterService.getSemester(id);
+    return semester.toHashMap();
+  }
 
-	// @Restriced(permission = "")
-    @Route(url="call/semester/list")
-    public List<HashMap<String,Object>> getAllSemester(VMJExchange vmjExchange){
-		List<Semester> semesterList = semesterRepository.getAllObject("semester_impl");
-		return transformSemesterListToHashMap(semesterList);
-	}
+  @Restricted(permissionName = "ReadSemester")
+  @Route(url = "call/semester/active")
+  public HashMap<String, Object> getActiveSemester(VMJExchange vmjExchange) {
+    Semester semester = semesterService.getActiveSemester();
+    return semester.toHashMap();
+  }
 
-    public List<HashMap<String,Object>> transformSemesterListToHashMap(List<Semester> semesterList){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < semesterList.size(); i++) {
-            resultList.add(semesterList.get(i).toHashMap());
-        }
+  @Restricted(permissionName = "ReadSemester")
+  @Route(url = "call/semester/list")
+  public List<HashMap<String, Object>> getAllSemester(VMJExchange vmjExchange) {
+    List<Semester> semesterList = semesterService.getAllSemester();
+    return semesterService.transformSemesterListToHashMap(semesterList);
+  }
 
-        return resultList;
-	}
+  @Restricted(permissionName = "DeleteSemester")
+  @Route(url = "call/semester/delete")
+  public List<HashMap<String, Object>> deleteSemester(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
 
-	// @Restriced(permission = "")
-    @Route(url="call/semester/delete")
-    public List<HashMap<String,Object>> deleteSemester(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		semesterRepository.deleteObject(id);
-		return getAllSemester(vmjExchange);
-	}
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
+
+    List<Semester> semesterList = semesterService.deleteSemester(id);
+    return semesterService.transformSemesterListToHashMap(semesterList);
+  }
 
 }

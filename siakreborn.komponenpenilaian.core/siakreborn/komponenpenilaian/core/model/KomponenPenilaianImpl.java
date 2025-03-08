@@ -14,32 +14,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.kelas.core.*;
 
-@Entity(name="komponenpenilaian_impl")
-@Table(name="komponenpenilaian_impl")
+@Entity(name = "komponen_penilaian_impl")
+@Table(name = "komponen_penilaian_impl")
 public class KomponenPenilaianImpl extends KomponenPenilaianComponent {
 
-	public KomponenPenilaianImpl(UUID id, String nama, KelasImpl kelasimpl, int bobot) {
-		this.id = id;
-		this.nama = nama;
-		this.kelasimpl = kelasimpl;
-		this.bobot = bobot;
-	}
+  public KomponenPenilaianImpl(String nama, Kelas kelas, double bobot) {
+    this.id = UUID.randomUUID();
+    this.nama = nama;
+    this.kelas = kelas;
+    this.bobot = bobot;
+    this.objectName = KomponenPenilaianImpl.class.getName();
+  }
 
-	public KomponenPenilaianImpl(, String nama, KelasImpl kelasimpl, int bobot) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = nama;
-		this.kelasimpl = kelasimpl;
-		this.bobot = bobot;
-	}
+  public KomponenPenilaianImpl(UUID id, String nama, Kelas kelas, double bobot) {
+    this.id = id;
+    this.nama = nama;
+    this.kelas = kelas;
+    this.bobot = bobot;
+    this.objectName = KomponenPenilaianImpl.class.getName();
+  }
 
-	public KomponenPenilaianImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = "";
-		this.bobot = 0;
-	}
-
+  public KomponenPenilaianImpl() {
+    this.id = UUID.randomUUID();
+    this.nama = "";
+    this.bobot = 0;
+    this.objectName = KomponenPenilaianImpl.class.getName();
+  }
 
 }

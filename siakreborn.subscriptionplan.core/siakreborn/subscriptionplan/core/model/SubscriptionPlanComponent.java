@@ -10,67 +10,71 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="subscriptionplan_comp")
+@Entity(name = "subscriptionplan_comp")
+@Table(name = "subscriptionplan_comp")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class SubscriptionPlanComponent implements SubscriptionPlan{
-	@Id
-	protected UUID id; 
-	protected String deskripsi;
-	protected String name;
-	protected int harga;
+public abstract class SubscriptionPlanComponent implements SubscriptionPlan {
+  @Id
+  protected UUID id;
+  protected String name;
+  protected String deskripsi;
+  protected int harga;
 
-	public SubscriptionPlanComponent() {
+  protected String objectName = SubscriptionPlanComponent.class.getName();
 
-	} 
+  public SubscriptionPlanComponent() {
 
-	public UUID getId() {
-		return this.id;
-	}
+  }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getDeskripsi() {
-		return this.deskripsi;
-	}
+  public UUID getId() {
+    return this.id;
+  }
 
-	public void setDeskripsi(String deskripsi) {
-		this.deskripsi = deskripsi;
-	}
-	public String getName() {
-		return this.name;
-	}
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	public int getHarga() {
-		return this.harga;
-	}
+  public String getName() {
+    return this.name;
+  }
 
-	public void setHarga(int harga) {
-		this.harga = harga;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDeskripsi() {
+    return this.deskripsi;
+  }
+
+  public void setDeskripsi(String deskripsi) {
+    this.deskripsi = deskripsi;
+  }
  
+  public int getHarga() {
+    return this.harga;
+  }
 
-	@Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            " deskripsi='" + getDeskripsi() + "'" +
-            " name='" + getName() + "'" +
-            " harga='" + getHarga() + "'" +
-            "}";
-    }
-	
-    public HashMap<String, Object> toHashMap() {
-        HashMap<String, Object> subscriptionplanMap = new HashMap<String,Object>();
-		subscriptionplanMap.put("id",getId());
-		subscriptionplanMap.put("deskripsi",getDeskripsi());
-		subscriptionplanMap.put("name",getName());
-		subscriptionplanMap.put("harga",getHarga());
+  public void setHarga(int harga) {
+    this.harga = harga;
+  }
 
-        return subscriptionplanMap;
-    }
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        " name='" + getName() + "'" +
+        " deskripsi='" + getDeskripsi() + "'" +
+        " harga='" + getHarga() + "'" +
+        "}";
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> subscriptionplanMap = new HashMap<String, Object>();
+    subscriptionplanMap.put("id", getId());
+    subscriptionplanMap.put("name", getName());
+    subscriptionplanMap.put("deskripsi", getDeskripsi());
+    subscriptionplanMap.put("harga", getHarga());
+
+    return subscriptionplanMap;
+  }
 }

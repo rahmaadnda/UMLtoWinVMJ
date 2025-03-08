@@ -1,102 +1,89 @@
 package siakreborn.adminakademik.core;
+
 import java.util.*;
+import java.util.logging.Logger;
 
 import vmj.routing.route.Route;
 import vmj.routing.route.VMJExchange;
 import siakreborn.adminakademik.AdminAkademikFactory;
-import prices.auth.vmj.annotations.Restricted;
+import vmj.auth.annotations.Restricted;
 //add other required packages
 
-public class AdminAkademikResourceImpl extends AdminAkademikResourceComponent{
+public class AdminAkademikResourceImpl extends AdminAkademikResourceComponent {
+  AdminAkademikService adminAkademikService = new AdminAkademikServiceImpl();
+  private static final Logger LOGGER = Logger.getLogger(AdminAkademikResourceImpl.class.getName());
 
-	// @Restriced(permission = "")
-    @Route(url="call/adminakademik/save")
-    public List<HashMap<String,Object>> saveAdminAkademik(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		AdminAkademik adminakademik = createAdminAkademik(vmjExchange);
-		adminakademikRepository.saveObject(adminakademik);
-		return getAllAdminAkademik(vmjExchange);
-	}
+  @Restricted(permissionName = "CreateAdminAkademik")
+  @Route(url = "call/adminakademik/save")
+  public List<HashMap<String, Object>> saveAdminAkademik(VMJExchange vmjExchange) {
+    List<AdminAkademik> listAdminAkademik = adminAkademikService.saveAdminAkademik((HashMap<String, Object>) vmjExchange.getPayload());
+    return adminAkademikService.transformAdminAkademikListToHashMap(listAdminAkademik);
+  }
 
-    public AdminAkademik createAdminAkademik(VMJExchange vmjExchange){
-		String email = (String) vmjExchange.getRequestBodyForm("email");
-		String nama = (String) vmjExchange.getRequestBodyForm("nama");
+  @Restricted(permissionName = "UpdateAdminAkademik")
+  @Route(url = "call/adminakademik/update")
+  public HashMap<String, Object> updateAdminAkademik(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
+
+    AdminAkademik adminAkademik = adminAkademikService.updateAdminAkademik((HashMap<String, Object>) vmjExchange.getPayload());
+    return adminAkademik.toHashMap();
+  }
+
+  @Restricted(permissionName = "ReadAdminAkademik")
+  @Route(url = "call/adminakademik/detail")
+  public HashMap<String, Object> getAdminAkademik(VMJExchange vmjExchange) {
+    String idStr = null;
+    String email = null;
+    HashMap<String, Object> error = new HashMap<>();
 		
-		//to do: fix association attributes
-		
-		AdminAkademik adminakademik = AdminAkademikFactory.createAdminAkademik("siakreborn.adminakademik.core.AdminAkademikImpl", id, email, nama);
-			return adminakademik;
-	}
-
-    public AdminAkademik createAdminAkademik(VMJExchange vmjExchange, int id){
-		String email = (String) vmjExchange.getRequestBodyForm("email");
-		String nama = (String) vmjExchange.getRequestBodyForm("nama");
-		
-		//to do: fix association attributes
-		
-		AdminAkademik adminakademik = AdminAkademikFactory.createAdminAkademik("siakreborn.adminakademik.core.AdminAkademikImpl", , email, nama);
-			return adminakademik;
-	}
-
-    // @Restriced(permission = "")
-    @Route(url="call/adminakademik/update")
-    public HashMap<String, Object> updateAdminAkademik(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
-		}
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		
-		AdminAkademik adminakademik = adminakademikRepository.getObject(id);
-		adminakademik.setEmail((String) vmjExchange.getRequestBodyForm("email"));
-		adminakademik.setNama((String) vmjExchange.getRequestBodyForm("nama"));
-		
-		adminakademikRepository.updateObject(adminakademik);
-		adminakademik = adminakademikRepository.getObject(id);
-		//to do: fix association attributes
-		
-		return adminakademik.toHashMap();
-		
-	}
-
-	// @Restriced(permission = "")
-    @Route(url="call/adminakademik/detail")
-    public HashMap<String, Object> getAdminAkademik(VMJExchange vmjExchange){
-		String idStr = vmjExchange.getGETParam("id"); 
-		int id = Integer.parseInt(idStr);
-		AdminAkademik adminakademik = adminakademikRepository.getObject(id);
-		return adminakademik.toHashMap();
-	}
-
-	// @Restriced(permission = "")
-    @Route(url="call/adminakademik/list")
-    public List<HashMap<String,Object>> getAllAdminAkademik(VMJExchange vmjExchange){
-		List<AdminAkademik> adminakademikList = adminakademikRepository.getAllObject("adminakademik_impl");
-		return transformAdminAkademikListToHashMap(adminakademikList);
-	}
-
-    public List<HashMap<String,Object>> transformAdminAkademikListToHashMap(List<AdminAkademik> adminakademikList){
-		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-        for(int i = 0; i < adminakademikList.size(); i++) {
-            resultList.add(adminakademikList.get(i).toHashMap());
-        }
-
-        return resultList;
-	}
-
-	// @Restriced(permission = "")
-    @Route(url="call/adminakademik/delete")
-    public List<HashMap<String,Object>> deleteAdminAkademik(VMJExchange vmjExchange){
-		if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
-			return null;
+		try {
+			idStr = vmjExchange.getGETParam("id");
+      if(idStr == null) {
+        throw new IllegalArgumentException("Invalid UUID");
+      }
+      
+      UUID id = UUID.fromString(idStr);
+      AdminAkademik adminAkademik = adminAkademikService.getAdminAkademik(id);
+      return adminAkademik.toHashMap();
+		} catch (Exception e) {
+      LOGGER.severe("Error: " + e);
+      error.put("error", e);
 		}
 		
-		String idStr = (String) vmjExchange.getRequestBodyForm("id");
-		int id = Integer.parseInt(idStr);
-		adminakademikRepository.deleteObject(id);
-		return getAllAdminAkademik(vmjExchange);
-	}
+		try {
+			email = vmjExchange.getAuthPayload().getEmail();
+      AdminAkademik adminAkademik = adminAkademikService.getAdminAkademikByEmail(email);
+      return adminAkademik.toHashMap();
+		} catch (Exception e) {
+      LOGGER.severe("Error: " + e);
+      error.put("error", e);
+		}
+
+    error.put("message", "Data dengan id: "+idStr+" atau token dengan email: " + email + " tidak ditemukan");
+    return error;
+  }
+
+  @Restricted(permissionName = "ReadAdminAkademik")
+  @Route(url = "call/adminakademik/list")
+  public List<HashMap<String, Object>> getAllAdminAkademik(VMJExchange vmjExchange) {
+    List<AdminAkademik> adminAkademikList = adminAkademikService.getAllAdminAkademik();
+    return adminAkademikService.transformAdminAkademikListToHashMap(adminAkademikList);
+  }
+
+  @Restricted(permissionName = "DeleteAdminAkademik")
+  @Route(url = "call/adminakademik/delete")
+  public List<HashMap<String, Object>> deleteAdminAkademik(VMJExchange vmjExchange) {
+    if (vmjExchange.getHttpMethod().equals("OPTIONS")) {
+      return null;
+    }
+
+    String idStr = (String) vmjExchange.getRequestBodyForm("id");
+    UUID id = UUID.fromString(idStr);
+
+    List<AdminAkademik> adminAkademikList = adminAkademikService.deleteAdminAkademik(id);
+    return adminAkademikService.transformAdminAkademikListToHashMap(adminAkademikList);
+  }
 
 }

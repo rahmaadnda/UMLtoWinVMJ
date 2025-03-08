@@ -14,30 +14,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-@Entity(name="adminakademik_impl")
-@Table(name="adminakademik_impl")
+@Entity(name = "adminakademik_impl")
+@Table(name = "adminakademik_impl")
 public class AdminAkademikImpl extends AdminAkademikComponent {
 
-	public AdminAkademikImpl(UUID id, String email, String nama) {
-		this.id = id;
-		this.email = email;
-		this.nama = nama;
-	}
+  public AdminAkademikImpl(UUID id, String nama, String email) {
+    this.id = id;
+    this.nama = nama;
+    this.email = email;
+    this.objectName = AdminAkademikImpl.class.getName();
+  }
 
-	public AdminAkademikImpl(, String email, String nama) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.email = email;
-		this.nama = nama;
-	}
+  public AdminAkademikImpl(String nama, String email) {
+    this.id = UUID.randomUUID();
+    this.nama = nama;
+    this.email = email;
+    this.objectName = AdminAkademikImpl.class.getName();
+  }
 
-	public AdminAkademikImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.email = "";
-		this.nama = "";
-	}
-
+  public AdminAkademikImpl() {
+    this.id = UUID.randomUUID();
+    this.nama = "";
+    this.email = "";
+    this.objectName = AdminAkademikImpl.class.getName();
+  }
 
 }

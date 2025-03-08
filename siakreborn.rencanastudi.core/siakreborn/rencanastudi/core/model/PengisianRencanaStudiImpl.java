@@ -14,30 +14,30 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.semester.core.Semester;
 
-@Entity(name="pengisianrencanastudi_impl")
-@Table(name="pengisianrencanastudi_impl")
+@Entity(name = "pengisian_rencana_studi_impl")
+@Table(name = "pengisian_rencana_studi_impl")
 public class PengisianRencanaStudiImpl extends PengisianRencanaStudiComponent {
 
-	public PengisianRencanaStudiImpl(DateTime mulai, DateTime akhir, UUID id, SemesterImpl semesterimpl) {
-		this.mulai = mulai;
-		this.akhir = akhir;
-		this.id = id;
-		this.semesterimpl = semesterimpl;
-	}
+  public PengisianRencanaStudiImpl(Date mulai, Date akhir, Semester semester) {
+    this.id = UUID.randomUUID();
+    this.mulai = mulai;
+    this.akhir = akhir;
+    this.semester = semester;
+    this.objectName = PengisianRencanaStudiImpl.class.getName();
+  }
 
-	public PengisianRencanaStudiImpl(DateTime mulai, DateTime akhir, , SemesterImpl semesterimpl) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.mulai = mulai;
-		this.akhir = akhir;
-		this.semesterimpl = semesterimpl;
-	}
+  public PengisianRencanaStudiImpl(UUID id, Date mulai, Date akhir, Semester semester) {
+    this.id = id;
+    this.mulai = mulai;
+    this.akhir = akhir;
+    this.semester = semester;
+    this.objectName = PengisianRencanaStudiImpl.class.getName();
+  }
 
-	public PengisianRencanaStudiImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
-
-
+  public PengisianRencanaStudiImpl() {
+    this.id = UUID.randomUUID();
+    this.objectName = PengisianRencanaStudiImpl.class.getName();
+  }
 }

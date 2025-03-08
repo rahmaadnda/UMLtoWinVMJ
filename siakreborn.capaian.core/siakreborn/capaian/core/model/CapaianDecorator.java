@@ -10,47 +10,60 @@ import javax.persistence.CascadeType;
 //add other required packages
 
 @MappedSuperclass
-public abstract class CapaianDecorator extends CapaianComponent{
-    @OneToOne(cascade=CascadeType.ALL)
-	protected CapaianComponent record;
-		
-	public CapaianDecorator (CapaianComponent record) {
-		this.record = record;
-	}
+public abstract class CapaianDecorator extends CapaianComponent {
+  @OneToOne(cascade = CascadeType.ALL)
+  protected CapaianComponent record;
 
-	public CapaianDecorator (int id, CapaianComponent record) {
-		this.id =  id;
-		this.record = record;
-	}
-	
-	public CapaianDecorator(){
-		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-	}
+  public CapaianDecorator(CapaianComponent record) {
+    this.id = UUID.randomUUID();
+    this.record = record;
+  }
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
-	public String getKode() {
-		return record.getKode();
-	}
-	public void setKode(String kode) {
-		record.setKode(kode);
-	}
-	public String getDeskripsi() {
-		return record.getDeskripsi();
-	}
-	public void setDeskripsi(String deskripsi) {
-		record.setDeskripsi(deskripsi);
-	}
+  public CapaianDecorator(UUID id, CapaianComponent record) {
+    this.id = id;
+    this.record = record;
+  }
 
+  public CapaianDecorator() {
+    super();
+    this.id = UUID.randomUUID();
+    this.record = new CapaianImpl();
+  }
 
-	public HashMap<String, Object> toHashMap() {
-        return this.record.toHashMap();
-    }
+  public CapaianComponent getRecord() {
+    return this.record;
+  }
+
+  public void setRecord(CapaianComponent record) {
+    this.record = record;
+  }
+
+  public UUID getId() {
+    return this.id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public String getKode() {
+    return record.getKode();
+  }
+
+  public void setKode(String kode) {
+    record.setKode(kode);
+  }
+
+  public String getDeskripsi() {
+    return record.getDeskripsi();
+  }
+
+  public void setDeskripsi(String deskripsi) {
+    record.setDeskripsi(deskripsi);
+  }
+
+  public HashMap<String, Object> toHashMap() {
+    return this.record.toHashMap();
+  }
 
 }

@@ -4,17 +4,17 @@ import vmj.routing.route.VMJExchange;
 import java.util.*;
 
 public interface ProgramStudi {
-	public UUID getId();
-	public void setId(UUID id);
-	public String getKode();
-	public void setKode(String kode);
-	public String getNoSK();
-	public void setNoSK(String noSK);
-	public String getNama();
-	public void setNama(String nama);
-	public String getKaprodi();
-	public void setKaprodi(String kaprodi);
-	public String getJenjang();
-	public void setJenjang(String jenjang);
+	UUID getId();
+	void setId(UUID id);
+	String getKode();
+	void setKode(String kode);
+	String getNoSK();
+	void setNoSK(String noSK);
+	String getNama();
+	void setNama(String nama);
+	String getKaprodi();
+	void setKaprodi(String kaprodi);
+	String getJenjang();
+	void setJenjang(String jenjang);
 	HashMap<String, Object> toHashMap();
 }

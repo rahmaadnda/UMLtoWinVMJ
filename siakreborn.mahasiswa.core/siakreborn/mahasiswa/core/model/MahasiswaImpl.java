@@ -14,50 +14,45 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import siakreborn.programstudi.core.ProgramStudi;
 
-@Entity(name="mahasiswa_impl")
-@Table(name="mahasiswa_impl")
+@Entity(name = "mahasiswa_impl")
+@Table(name = "mahasiswa_impl")
 public class MahasiswaImpl extends MahasiswaComponent {
 
-	public MahasiswaImpl(UUID id, String nama, String npm, String email, ProgramStudiImpl programstudiimpl, String statusAkademik, int tahunAngkatan, boolean isPublic) {
-		this.id = id;
-		this.nama = nama;
-		this.npm = npm;
-		this.email = email;
-		this.programstudiimpl = programstudiimpl;
-		this.statusAkademik = statusAkademik;
-		this.tahunAngkatan = tahunAngkatan;
-		this.isPublic = isPublic;
-	}
+  public MahasiswaImpl(String nama, String npm, int tahunAngkatan, String email, ProgramStudi programStudi, String statusAkademik) {
+    this.id = UUID.randomUUID();
+    this.nama = nama;
+    this.npm = npm;
+    this.tahunAngkatan = tahunAngkatan;
+    this.email = email;
+    this.programStudi = programStudi;
+    this.statusAkademik = statusAkademik;
+    this.isPublic = false;
+    this.objectName = MahasiswaImpl.class.getName();
+  }
 
-	public MahasiswaImpl(, String nama, String npm, String email, ProgramStudiImpl programstudiimpl, String statusAkademik, int tahunAngkatan, boolean isPublic) {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = nama;
-		this.npm = npm;
-		this.email = email;
-		this.programstudiimpl = programstudiimpl;
-		this.statusAkademik = statusAkademik;
-		this.tahunAngkatan = tahunAngkatan;
-		this.isPublic = isPublic;
-	}
+  public MahasiswaImpl(UUID id, String nama, String npm, int tahunAngkatan, String email, ProgramStudi programStudi, String statusAkademik) {
+    this.id = id;
+    this.nama = nama;
+    this.npm = npm;
+    this.tahunAngkatan = tahunAngkatan;
+    this.email = email;
+    this.programStudi = programStudi;
+    this.statusAkademik = statusAkademik;
+    this.isPublic = false;
+    this.objectName = MahasiswaImpl.class.getName();
+  }
 
-	public MahasiswaImpl() {
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
-		this.nama = "";
-		this.npm = "";
-		this.email = "";
-		this.statusAkademik = "";
-		this.tahunAngkatan = 0;
-	}
-
-	public HashMap<String, Object> verify(VMJExchange vmjExchange) {
-		// TODO: implement this method
-	}
-
-	public HashMap<String, Object> graduate(VMJExchange vmjExchange) {
-		// TODO: implement this method
-	}
+  public MahasiswaImpl() {
+    this.id = UUID.randomUUID();
+    this.nama = "";
+    this.npm = "";
+    this.tahunAngkatan = 0;
+    this.email = "";
+    this.statusAkademik = "Kosong";
+    this.isPublic = false;
+    this.objectName = MahasiswaImpl.class.getName();
+  }
 
 }

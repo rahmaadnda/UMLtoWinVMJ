@@ -7,34 +7,40 @@ import vmj.routing.route.VMJExchange;
 import javax.persistence.OneToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.CascadeType;
-//add other required packages
+
+import siakreborn.matakuliah.core.MataKuliah;
+import siakreborn.semester.core.Semester;
 
 @MappedSuperclass
 public abstract class KelasDecorator extends KelasComponent{
-    @OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL)
 	protected KelasComponent record;
 		
-	public KelasDecorator (KelasComponent record) {
+	public KelasDecorator (KelasComponent record, String objectName) {
 		this.record = record;
+		this.id = UUID.randomUUID();
+		this.record.objectName = objectName;
 	}
 
-	public KelasDecorator (int id, KelasComponent record) {
+	public KelasDecorator (UUID id, KelasComponent record) {
 		this.id =  id;
 		this.record = record;
 	}
 	
 	public KelasDecorator(){
 		super();
-		Random r = new Random();
-		this.id =  Math.abs(r.nextInt());
+		this.record = new KelasImpl();
+		this.id = UUID.randomUUID();
 	}
 
-	public UUID getId() {
-		return record.getId();
-	}
-	public void setId(UUID id) {
-		record.setId(id);
-	}
+	public KelasComponent getRecord() {
+        return this.record;
+    }
+
+    public void setRecord(KelasComponent record) {
+        this.record = record;
+    }
+	
 	public String getNama() {
 		return record.getNama();
 	}
@@ -59,7 +65,18 @@ public abstract class KelasDecorator extends KelasComponent{
 	public void setJadwal(String jadwal) {
 		record.setJadwal(jadwal);
 	}
-
+	public MataKuliah getMataKuliah() {
+        return this.record.getMataKuliah();
+    }
+    public void setMataKuliah(MataKuliah mataKuliah) {
+        this.record.setMataKuliah(mataKuliah);
+    }
+	public Semester getSemester(){
+		return this.record.getSemester();
+	}
+	public void setSemester(Semester semester){
+		this.record.setSemester(semester);
+	}
 
 	public HashMap<String, Object> toHashMap() {
         return this.record.toHashMap();
