@@ -112,17 +112,22 @@ public class MataKuliahServiceImpl extends MataKuliahServiceDecorator {
   }
 
   public List<MataKuliah> deleteMataKuliah(UUID id) {
-    MataKuliah savedMataKuliah = mataKuliahRepository.getObject(id);
-    LOGGER.info("id " + id);
+    // MataKuliah savedMataKuliah = mataKuliahRepository.getObject(id);
+    // LOGGER.info("id " + id);
 
-    LOGGER.info("saved " + savedMataKuliah);
+    // LOGGER.info("saved " + savedMataKuliah);
     
-    UUID recordMataKuliahId = ((MataKuliahDecorator) savedMataKuliah).getRecord().getId();
+    // UUID recordMataKuliahId = ((MataKuliahDecorator) savedMataKuliah).getRecord().getId();
 
-    LOGGER.info("record" + recordMataKuliahId);
-    mataKuliahRepository.deleteObject(id);
-    mataKuliahRepository.deleteObject(recordMataKuliahId)
-    mataKuliahRepository.deleteObject(savedMataKuliah)
+    // LOGGER.info("record" + recordMataKuliahId);
+    // mataKuliahRepository.deleteObject(id);
+    // mataKuliahRepository.deleteObject(recordMataKuliahId)
+    // mataKuliahRepository.deleteObject(savedMataKuliah)
+
+    // Catalog catalog = catalogRepository.getObject(catalogBrandId);
+    MataKuliah mataKuliah = mataKuliahRepository.getObject(id);
+    // mataKuliah.setIsDeleted(true);
+    mataKuliahRepository.updateObject(mataKuliah);
     return getAllMataKuliah();
   }
 }
